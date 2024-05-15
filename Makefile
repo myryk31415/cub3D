@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/05/11 02:33:28 by padam            ###   ########.fr        #
+#    Updated: 2024/05/15 12:53:31 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,14 @@ NAME = cub3D
 
 CC = cc
 CFLAGS =  $(INCLUDES) -g3 -Wall -Wextra -Werror
-INCLUDES = -I./includes
-LIBS = -lreadline
+LIBS = -lm
 LIBFT_DIR = libft
+LIBMLX_DIR = ./MLX42
+INCLUDES = -I./include -I $(LIBMLX_DIR)/include
+#MacOS
+#LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
+#Linux
+LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -lXext -lX11 -lm -lbsd -lglfw -lpthread
 
 SRC_PATH = src
 OBJ_PATH = obj
@@ -26,7 +31,8 @@ OBJ_DIRS =	execution/nodes	execution/builtins	execution/utils	main	main/expansio
 
 SRCS_MAIN =	main.c
 
-SRC_NAME =	$(addprefix main/,						$(SRCS_MAIN))		\
+SRC_NAME =											$(SRCS_MAIN)
+#			$(addprefix main/,						$(SRCS_MAIN))		\
 
 RED = \033[1;31m
 GREEN = \033[1;32m
@@ -39,12 +45,15 @@ OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
 all: $(NAME)
 
-$(NAME): ascii_art $(LIBFT_DIR)/libft.a $(OBJS)
+$(NAME): ascii_art $(LIBFT_DIR)/libft.a $(OBJS) $(LIBMLX_DIR)
 	@$(CC) -o $(NAME) $(CFLAGS) $(LIBS) $(OBJS) $(LIBFT_DIR)/libft.a
 	@printf "%-100s\n" "$(NAME) compiled"
 
 $(LIBFT_DIR)/libft.a:
 	@make -C $(LIBFT_DIR)
+
+$(LIBMLX_DIR):
+	cd $(LIBMLX_DIR) && cmake -B build && cmake --build build -j4
 
 $(OBJ_PATH)	:
 	@mkdir -p $(OBJ_PATH)
@@ -54,10 +63,10 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	@printf "%-100s\r" "$(CC) $(CFLAGS) -o $@"
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
-init_submodules:
+init:
 	git submodule update --init --recursive
 
-update_submodules:
+update:
 	git submodule update --recursive --remote
 
 clean:

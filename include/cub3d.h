@@ -6,7 +6,13 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/08 22:43:12 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/15 12:52:04 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef CUB3D_H
+# define CUB3D_H
+
+# include "../libft/include/libft.h"
+
+#endif
