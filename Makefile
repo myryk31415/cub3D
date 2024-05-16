@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/05/15 12:53:31 by padam            ###   ########.fr        #
+#    Updated: 2024/05/16 17:15:48by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,18 @@ NAME = cub3D
 
 CC = cc
 CFLAGS =  $(INCLUDES) -g3 -Wall -Wextra -Werror
-LIBS = -lm
 LIBFT_DIR = libft
 LIBMLX_DIR = ./MLX42
-INCLUDES = -I./include -I $(LIBMLX_DIR)/include
-#MacOS
-#LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
+INCLUDES = -I./includes -I $(LIBMLX_DIR)/include
+
+ifeq ($(shell uname), Linux)
 #Linux
+CFLAGS += -D LINUX -lm
 LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -lXext -lX11 -lm -lbsd -lglfw -lpthread
+else
+#MacOS
+LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
+endif
 
 SRC_PATH = src
 OBJ_PATH = obj
