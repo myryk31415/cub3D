@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/15 13:06:34 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/16 22:26:53 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	main(int argc, char **argv)
 {
-	t_vec	vec;
+	t_vec3d	vec;
 
 	vec.x = 10.0;
 	vec.y = 8.0;
@@ -25,6 +25,6 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: %s <arg1> <arg2> <arg3> <arg4>\n", argv[0]);
 		return (1);
 	}
-	printf("Magnitude %f\n", vec_len(vec));
+	printf("Magnitude %f\n", vec3d_len(vec));
 	return (0);
 }

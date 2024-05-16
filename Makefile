@@ -49,7 +49,7 @@ OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
 all: $(NAME)
 
-$(NAME): ascii_art $(LIBFT_DIR)/libft.a $(OBJS) $(LIBMLX_DIR)
+$(NAME): $(LIBFT_DIR)/libft.a $(OBJS) $(LIBMLX_DIR)
 	@$(CC) -o $(NAME) $(CFLAGS) $(LIBS) $(OBJS) $(LIBFT_DIR)/libft.a
 	@printf "%-100s\n" "$(NAME) compiled"
 
