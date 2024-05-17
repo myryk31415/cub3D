@@ -16,7 +16,7 @@ CC = cc
 CFLAGS =  $(INCLUDES) -g3 -Wall -Wextra -Werror
 LIBFT_DIR = libft
 LIBMLX_DIR = ./MLX42
-INCLUDES = -I./includes -I $(LIBMLX_DIR)/include
+INCLUDES = -I./includes -I $(LIBMLX_DIR)/include/MLX42/
 
 ifeq ($(shell uname), Linux)
 #Linux
@@ -33,7 +33,7 @@ OBJ_PATH = obj
 OBJ_DIRS =	execution/nodes	execution/builtins	execution/utils	main	main/expansion \
 			parser	parser/binary_tree	\
 
-SRCS_MAIN =	main.c
+SRCS_MAIN =	main.c raycast.c
 
 SRC_NAME =											$(SRCS_MAIN)
 #			$(addprefix main/,						$(SRCS_MAIN))		\
@@ -49,8 +49,8 @@ OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
 all: $(NAME)
 
-$(NAME): $(LIBFT_DIR)/libft.a $(OBJS) $(LIBMLX_DIR)
-	@$(CC) -o $(NAME) $(CFLAGS) $(LIBS) $(OBJS) $(LIBFT_DIR)/libft.a
+$(NAME): $(LIBFT_DIR)/libft.a $(LIBMLX_DIR) $(OBJS)
+	@$(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIBMLX) $(LIBFT_DIR)/libft.a
 	@printf "%-100s\n" "$(NAME) compiled"
 
 $(LIBFT_DIR)/libft.a:
@@ -59,7 +59,7 @@ $(LIBFT_DIR)/libft.a:
 $(LIBMLX_DIR):
 	cd $(LIBMLX_DIR) && cmake -B build && cmake --build build -j4
 
-$(OBJ_PATH)	:
+$(OBJ_PATH):
 	@mkdir -p $(OBJ_PATH)
 	@mkdir -p $(addprefix $(OBJ_PATH)/,$(OBJ_DIRS))
 
@@ -104,4 +104,4 @@ ascii_art:
                                             $(BLUE)by: padam && aweizman$(RESET) \n\
                                                                   \n"
 
-.PHONY: all, $(NAME), $(LIBFT_DIR)/libft.a, $(OBJ_PATH), $(OBJ_PATH), clean, fclean, re
+.PHONY: all $(NAME) $(LIBFT_DIR)/libft.a $(LIBMLX) $(OBJ_PATH) $(OBJ_PATH) clean fclean re

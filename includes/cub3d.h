@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 02:33:26 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 12:11:44 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,13 @@ typedef struct s_game
 	mlx_image_t	*image;
 	t_map		map;
 	t_map		*textures;
+	t_pixel		ceiling;
+	t_pixel		floor;
 	t_vec2d		pos;
 	t_vec2d		dir;
 	t_vec2d		camera_plane;
 	int			fov_factor;
 }	t_game;
 
+int	raycast(t_game *game);
 #endif

@@ -6,25 +6,71 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/16 22:26:53 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 12:12:47 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include <stdio.h>
 
+void	init_test(t_game *game)
+{
+	game->pos.x = 2.0;
+	game->pos.y = 2.0;
+	game->map = (t_map){.width = 10, .height = 10};
+	game->map.grid = malloc(sizeof(t_pixel *) * game->map.height);
+	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
+	game->image = mlx_new_image(game->mlx, 1000, 800);
+	mlx_image_to_window(game->mlx, game->image, 0, 0);
+	for (int i = 0; i < game->map.height; i++)
+	{
+		game->map.grid[i] = ft_calloc(game->map.width, sizeof(t_pixel));
+		for (int j = 0; j < game->map.width; j++)
+		{
+			if (i == 0 || i == game->map.height -1 || j == 0 || j == game->map.width - 1)
+				game->map.grid[i][j].value = 1;
+			else
+				game->map.grid[i][j].value = 0;
+		}
+	}
+	game->textures = ft_calloc(1, sizeof(t_map));
+	game->textures->width = 64;
+	game->textures->height = 64;
+	game->textures->grid = malloc(sizeof(t_pixel *) * game->textures->height);
+	for (int i = 0; i < game->textures->height; i++)
+	{
+		game->textures->grid[i] = ft_calloc(game->textures->width, sizeof(t_pixel));
+		for (int j = 0; j < game->textures->width; j++)
+		{
+			game->textures->grid[i][j].bytes.r = (double)i / game->textures->height * 255;
+			game->textures->grid[i][j].bytes.g = 0;
+			game->textures->grid[i][j].bytes.b = (double)j / game->textures->width * 255;
+			game->textures->grid[i][j].bytes.a = 255;
+		}
+	}
+	game->ceiling.bytes.r = 0;
+	game->ceiling.bytes.g = 0;
+	game->ceiling.bytes.b = 255;
+	game->ceiling.bytes.a = 255;
+	game->floor.bytes.r = 0;
+	game->floor.bytes.g = 10;
+	game->floor.bytes.b = 0;
+	game->floor.bytes.a = 255;
+}
+
+void	loop_hook(void *game)
+{
+	raycast(game);
+}
+
 int	main(int argc, char **argv)
 {
-	t_vec3d	vec;
+	t_game	game;
 
-	vec.x = 10.0;
-	vec.y = 8.0;
-	vec.z = 2.0;
-	if (argc == 1)
-	{
-		ft_printf("Usage: %s <arg1> <arg2> <arg3> <arg4>\n", argv[0]);
-		return (1);
-	}
-	printf("Magnitude %f\n", vec3d_len(vec));
+	(void)argc;
+	(void)argv;
+	init_test(&game);
+	mlx_loop_hook(game.mlx, loop_hook, &game);
+	mlx_loop(game.mlx);
 	return (0);
 }
