@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 12:46:17 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 14:30:15 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 void	init_test(t_game *game)
 {
-	game->pos.x = 2.0;
-	game->pos.y = 2.0;
-	game->map = (t_map){.width = 10, .height = 10};
+	game->pos.x = 1.5;
+	game->pos.y = 1.5;
+	game->dir.x = -1.2;
+	game->dir.y = -1.0;
+	game->map = (t_map){.width = 8, .height = 8};
 	game->map.grid = malloc(sizeof(t_pixel *) * game->map.height);
 	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
 	game->image = mlx_new_image(game->mlx, 1000, 800);
@@ -42,18 +44,18 @@ void	init_test(t_game *game)
 		game->textures->grid[i] = ft_calloc(game->textures->width, sizeof(t_pixel));
 		for (int j = 0; j < game->textures->width; j++)
 		{
-			game->textures->grid[i][j].bytes.r = (double)i / game->textures->height * 255;
+			game->textures->grid[i][j].bytes.r = ((double)i / game->textures->height) * 255;
 			game->textures->grid[i][j].bytes.g = 0;
-			game->textures->grid[i][j].bytes.b = (double)j / game->textures->width * 255;
+			game->textures->grid[i][j].bytes.b = ((double)j / game->textures->width) * 255;
 			game->textures->grid[i][j].bytes.a = 255;
 		}
 	}
 	game->ceiling.bytes.r = 0;
 	game->ceiling.bytes.g = 0;
-	game->ceiling.bytes.b = 255;
+	game->ceiling.bytes.b = 200;
 	game->ceiling.bytes.a = 255;
 	game->floor.bytes.r = 0;
-	game->floor.bytes.g = 10;
+	game->floor.bytes.g = 50;
 	game->floor.bytes.b = 0;
 	game->floor.bytes.a = 255;
 }

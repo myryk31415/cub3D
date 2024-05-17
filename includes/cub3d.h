@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 12:11:44 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 13:31:13 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ typedef union u_pixel
 	uint32_t	value;
 	struct s_pixel
 	{
-		uint8_t	r;
-		uint8_t	g;
-		uint8_t	b;
 		uint8_t	a;
+		uint8_t	b;
+		uint8_t	g;
+		uint8_t	r;
 	}	bytes;
 }	t_pixel;
 

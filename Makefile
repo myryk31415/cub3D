@@ -32,10 +32,12 @@ OBJ_PATH = obj
 
 OBJ_DIRS =	parsing	raycasting
 
-SRCS_MAIN =	main.c raycast.c
+SRCS_MAIN =	main.c
 
-SRC_NAME =											$(SRCS_MAIN)
-#			$(addprefix main/,						$(SRCS_MAIN))		\
+SRCS_RAY =	raycast.c
+
+SRC_NAME =											$(SRCS_MAIN)		\
+			$(addprefix raycasting/,				$(SRCS_RAY))
 
 RED = \033[1;31m
 GREEN = \033[1;32m

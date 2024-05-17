@@ -12,14 +12,17 @@
 
 #include "cub3d.h"
 
-int	draw_line(int x, double wall_dist, t_game *game)
+int	draw_line(int x, int side, double wall_dist, t_game *game)
 {
 	int		line_height;
 	int		draw_start;
 	int		draw_end;
 	int		i;
 
-	line_height = (int)(game->mlx->height / wall_dist);
+	if (wall_dist > 0)
+		line_height = (int)(game->mlx->height / wall_dist);
+	else
+		line_height = game->mlx->height;
 	draw_start = -line_height / 2 + game->mlx->height / 2;
 	if (draw_start < 0)
 		draw_start = 0;
@@ -34,7 +37,11 @@ int	draw_line(int x, double wall_dist, t_game *game)
 	}
 	while (i < draw_end)
 	{
-		mlx_put_pixel(game->image, x, i, game->textures->grid[i % game->textures->height][i % game->textures->width].value);
+		// t_pixel	pixel = game->textures->grid[i / game->textures->height][x / game->textures->width];
+		if (side < 2)
+			mlx_put_pixel(game->image, x, i, 0xFF0000FF);
+		else
+			mlx_put_pixel(game->image, x, i, 0x0000FFFF);
 		i++;
 	}
 	while (i < game->mlx->height)
@@ -106,22 +113,25 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 	}
 	double angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
 	if (side < 2)
-		wall_dist = cos(angle) * (side_dist.y - delta_dist.y);
-	else
 		wall_dist = cos(angle) * (side_dist.x - delta_dist.x);
-	return (draw_line(x, wall_dist, game));
+	else
+		wall_dist = cos(angle) * (side_dist.y - delta_dist.y);
+	return (draw_line(x, side, wall_dist, game));
 }
 
 int	raycast(t_game *game)
 {
 	t_vec2d	ray_dir;
 	int		x;
-	int		offset;
+	double	offset;
 
+	game->fov_factor = 1;
+	game->camera_plane = vec2d_rot(game->dir, -M_PI / 2);
+	game->camera_plane = vec2d_mul(game->camera_plane, 1.0 / game->fov_factor);
 	x = 0;
 	while (x < game->mlx->width)
 	{
-		offset = x * 2 / (double)game->mlx->width - 1;
+		offset = (double)x * 2 / game->mlx->width - 1;
 		ray_dir = vec2d_mul(game->camera_plane, offset);
 		ray_dir = vec2d_add(ray_dir, game->dir);
 		if (calculate_ray(x, ray_dir, game))
