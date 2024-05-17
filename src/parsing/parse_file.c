@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 21:58:46 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 22:59:09 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 	int				j;
 
 	png = mlx_load_png(tex_path);
-	pixels = ft_calloc(sizeof(t_pixel *), png->height + 1);
+	pixels = ft_calloc(sizeof(t_pixel *), png->height);
 	if (!pixels)
 		return (ft_putstr_fd("Error\n", 2), -1);
 	tex->height = png->height;
@@ -27,13 +27,13 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 	while (++i < png->height)
 	{
 		j = 0;
-		pixels[i] = ft_calloc(sizeof(t_pixel), png->width + 1);
+		pixels[i] = ft_calloc(sizeof(t_pixel), png->width);
 		while (j < png->width)
 		{
-			pixels[i][j].bytes.r = png->pixels[(j + 1) * 4 - 4];
-			pixels[i][j].bytes.g= png->pixels[(j + 1) * 4 - 3];
-			pixels[i][j].bytes.b = png->pixels[(j + 1) * 4 - 2];
-			pixels[i][j].bytes.a = png->pixels[(j + 1) * 4 - 1];
+			pixels[i][j].bytes.r = png->pixels[i * png->width + j * 4];
+			pixels[i][j].bytes.g = png->pixels[i * png->width + j * 4 + 1];
+			pixels[i][j].bytes.b = png->pixels[i * png->width + j * 4 + 2];
+			pixels[i][j].bytes.a = png->pixels[i * png->width + j * 4 + 3];
 			j++;
 		}
 	}

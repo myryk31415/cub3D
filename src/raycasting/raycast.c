@@ -21,7 +21,6 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	double	step;
 	t_vec2d texPos;
 
-	(void)ray_dir;
 	if (wall_dist > 0)
 		line_height = (int)(game->mlx->height / wall_dist);
 	else
@@ -36,7 +35,7 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	texPos.x = wall_x * (double)game->textures[side].width;
 	// why??
 	if (side <= 1 && ray_dir.y < 0)
-		texPos.x = game->textures[side].width - texPos.x;
+		texPos.x = game->textures[side].width - texPos.x - 1;
 	// if (side > 1 && ray_dir.y < 0)
 	// 	texPos.x = game->textures[0].width - texPos.x - 1;
 	texPos.y = (draw_start - game->mlx->height / 2 + line_height / 2) * step;
@@ -155,7 +154,7 @@ int	raycast(t_game *game)
 	double	offset;
 
 	game->fov_factor = 1;
-	game->camera_plane = vec2d_rot(game->dir, -M_PI / 2);
+	game->camera_plane = vec2d_rot(game->dir, M_PI / 2);
 	game->camera_plane = vec2d_mul(game->camera_plane, 1.0 / game->fov_factor);
 	x = 0;
 	while (x < game->mlx->width)

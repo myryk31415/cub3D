@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 21:55:21 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 22:28:50 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ void	arrow_keys(t_game *game)
 	if (mlx_is_key_down(game->mlx, MLX_KEY_DOWN))
 		game->pos = vec2d_sub(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
 	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
-		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
-	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
 		game->dir = vec2d_rot(game->dir, game->turn_speed * game->mlx->delta_time);
+	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
+		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
 }
 
 void	loop_hook(void *game)
