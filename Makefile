@@ -30,8 +30,7 @@ endif
 SRC_PATH = src
 OBJ_PATH = obj
 
-OBJ_DIRS =	execution/nodes	execution/builtins	execution/utils	main	main/expansion \
-			parser	parser/binary_tree	\
+OBJ_DIRS =	parsing	raycasting
 
 SRCS_MAIN =	main.c raycast.c
 
