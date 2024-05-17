@@ -6,16 +6,65 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 16:17:35 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 20:56:43 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-
-t_map	get_texture(char *str)
+int	fill_map(t_map	*tex, char *tex_path, int i)
 {
+	mlx_texture_t	*png;
+	t_pixel			**pixels;
+	int				j;
 
+	png = mlx_load_png(tex_path);
+	pixels = ft_calloc(sizeof(t_pixel *), png->height + 1);
+	if (!pixels)
+		return (ft_putstr_fd("Error\n", 2), -1);
+	tex->height = png->height;
+	tex->width = png->width;
+	while (++i < png->height)
+	{
+		j = 0;
+		pixels[i] = ft_calloc(sizeof(t_pixel), png->width + 1);
+		while (j < png->width)
+		{
+			pixels[i][j].bytes.r = png->pixels[(j + 1) * 4 - 4];
+			pixels[i][j].bytes.g= png->pixels[(j + 1) * 4 - 3];
+			pixels[i][j].bytes.b = png->pixels[(j + 1) * 4 - 2];
+			pixels[i][j].bytes.a = png->pixels[(j + 1) * 4 - 1];
+			j++;
+		}
+	}
+	tex->grid = pixels;
+	mlx_delete_texture(png);
+	return (0);
+}
+
+t_map	*get_texture(char *str)
+{
+	int		i;
+	int		j;
+	char	*texture_path;
+	t_map	*map;
+
+	i = -1;
+	map = ft_calloc(sizeof(map), 1);
+	if (!map)
+		return (ft_putstr_fd("Error\n", 2), NULL);
+	while (str[++i])
+		if (str[i] == '/')
+			break;
+	if (!str[i])
+		return (ft_putstr_fd("Error\n", 2), NULL);
+	j = i;
+	while (str[j] != ' ' && str[j] != '\n')
+		j++;
+	texture_path = ft_substr(str, i, j - i);
+	if (fill_map(map, texture_path, -1) == -1)
+		return (NULL);
+	return (map);
 }
 
 t_pixel	get_color(char *str, int count)
@@ -67,7 +116,7 @@ t_map	*parse_map(char **file, int i)
 		if (!map.grid[j])
 			return (ft_putstr_fd("Error\n", 2), NULL);
 		while (file[i][++k])
-			map.grid[j][k].value = ft_atoi(file[i][k]);
+			map.grid[j][k].value = ft_atoi(&file[i][k]);
 		j++;
 		i++;
 	}
@@ -84,13 +133,13 @@ int	parse_file(t_game *game, char **file)
 	while (file[i])
 	{
 		if (file[i][0] == 'N' && file[i][1] == 'O')
-			game->textures[0] = get_texture(file[i]);
+			game->textures[0] = *get_texture(file[i]);
 		else if (file[i][0] == 'S' && file[i][1] == 'O')
-			game->textures[1] = get_texture(file[i]);
+			game->textures[1] = *get_texture(file[i]);
 		else if (file[i][0] == 'W' && file[i][1] == 'E')
-			game->textures[2] = get_texture(file[i]);
+			game->textures[2] = *get_texture(file[i]);
 		else if (file[i][0] == 'E' && file[i][1] == 'A')
-			game->textures[3] = get_texture(file[i]);
+			game->textures[3] = *get_texture(file[i]);
 		else if (file[i][0] == 'F')
 			game->floor = get_color(file[i], 0);
 		else if (file[i][0] == 'C')
@@ -102,6 +151,7 @@ int	parse_file(t_game *game, char **file)
 		}
 		i++;
 	}
+	return (0);
 }
 
 int	parser(t_game *game, char *input_file)
@@ -111,4 +161,7 @@ int	parser(t_game *game, char *input_file)
 	file = read_file(input_file);
 	if (file == NULL)
 		return (ft_putstr_fd("Error\n", 2), -1);
+	if (parse_file(game, file) == -1)
+		return (ft_putstr_fd("Error\n", 2), -1);
+	return (0);
 }

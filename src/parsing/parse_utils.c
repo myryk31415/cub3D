@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 15:07:48 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 20:28:21 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,5 @@ int	check_if_map(char *str)
 			return (1);
 		j++;
 	}
-	retrun (0);
+	return (0);
 }
