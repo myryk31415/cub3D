@@ -55,10 +55,6 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 			color.bytes.g /= 3;
 		}
 		mlx_put_pixel(game->image, x, i, color.value);
-		// if (side < 2)
-		// 	mlx_put_pixel(game->image, x, i, 0xFF0000FF);
-		// else
-		// 	mlx_put_pixel(game->image, x, i, 0x0000FFFF);
 		i++;
 	}
 	while (i < game->mlx->height)
@@ -67,6 +63,18 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 		i++;
 	}
 	return (0);
+}
+
+void	black_line(t_game *game, int x)
+{
+	int	i;
+
+	i = 0;
+	while (i < game->mlx->height)
+	{
+		mlx_put_pixel(game->image, x, i, 0x000000FF);
+		i++;
+	}
 }
 
 int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
@@ -126,7 +134,15 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 			if (ray_dir.y < 0)
 				side = 3;
 		}
-		if (game->map.grid[map_y][map_x].value)
+		if (map_x < 0 && ray_dir.x <= 0)
+			return (black_line(game, x), 0);
+		if (map_x >= game->map.width && ray_dir.x >= 0)
+			return (black_line(game, x), 0);
+		if (map_y < 0 && ray_dir.y <= 0)
+			return (black_line(game, x), 0);
+		if (map_y >= game->map.height && ray_dir.y >= 0)
+			return (black_line(game, x), 0);
+		if (map_y >= 0 && map_y < game->map.height && map_x >= 0 && map_x < game->map.width && game->map.grid[map_y][map_x].value)
 			hit = 1;
 	}
 	double angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
