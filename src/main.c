@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 14:30:15 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 17:04:24 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,16 @@
 
 void	init_test(t_game *game)
 {
-	game->pos.x = 1.5;
-	game->pos.y = 1.5;
-	game->dir.x = -1.2;
+	game->pos.x = 1.0;
+	game->pos.y = 1.0;
+	game->dir.x = 0.0;
 	game->dir.y = -1.0;
+	game->speed = 2.5;
+	game->turn_speed = 2.5;
 	game->map = (t_map){.width = 8, .height = 8};
 	game->map.grid = malloc(sizeof(t_pixel *) * game->map.height);
-	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
-	game->image = mlx_new_image(game->mlx, 1000, 800);
+	game->mlx = mlx_init(1920, 1080, "Cub3D", 1);
+	game->image = mlx_new_image(game->mlx, 1920, 1080);
 	mlx_image_to_window(game->mlx, game->image, 0, 0);
 	for (int i = 0; i < game->map.height; i++)
 	{
@@ -60,8 +62,21 @@ void	init_test(t_game *game)
 	game->floor.bytes.a = 255;
 }
 
+void	arrow_keys(t_game *game)
+{
+	if (mlx_is_key_down(game->mlx, MLX_KEY_UP))
+		game->pos = vec2d_add(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
+	if (mlx_is_key_down(game->mlx, MLX_KEY_DOWN))
+		game->pos = vec2d_sub(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
+	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
+		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
+	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
+		game->dir = vec2d_rot(game->dir, game->turn_speed * game->mlx->delta_time);
+}
+
 void	loop_hook(void *game)
 {
+	arrow_keys(game);
 	raycast(game);
 }
 

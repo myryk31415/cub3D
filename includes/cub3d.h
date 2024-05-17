@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 13:31:13 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 16:32:20 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/includes/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 # include <math.h>
+# include <stdio.h>
 
 typedef union u_pixel
 {
@@ -46,6 +47,8 @@ typedef struct s_game
 	t_pixel		floor;
 	t_vec2d		pos;
 	t_vec2d		dir;
+	double		speed;
+	float		turn_speed;
 	t_vec2d		camera_plane;
 	int			fov_factor;
 }	t_game;
