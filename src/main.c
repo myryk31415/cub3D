@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 12:46:17 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 16:41:28 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,14 @@ void	loop_hook(void *game)
 
 int	main(int argc, char **argv)
 {
-	t_game	game;
-
+	// t_game	game;
+	mlx_texture_t	*test;
 	(void)argc;
 	(void)argv;
-	init_test(&game);
-	mlx_loop_hook(game.mlx, loop_hook, &game);
-	mlx_loop(game.mlx);
+	// init_test(&game);
+	// mlx_loop_hook(game.mlx, loop_hook, &game);
+	// mlx_loop(game.mlx);
+	test = mlx_load_png("./stone.png");
+	ft_printf("%d\n", test->pixels[0]);
 	return (0);
 }

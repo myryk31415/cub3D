@@ -32,7 +32,7 @@ OBJ_PATH = obj
 
 OBJ_DIRS =	parsing	raycasting
 
-SRCS_MAIN =	main.c raycast.c
+SRCS_MAIN =	main.c
 
 SRC_NAME =											$(SRCS_MAIN)
 #			$(addprefix main/,						$(SRCS_MAIN))		\

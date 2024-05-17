@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 12:57:03 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 15:31:42 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,17 @@ typedef struct s_game
 	int			fov_factor;
 }	t_game;
 
-int	raycast(t_game *game);
+int		raycast(t_game *game);
+
+// Parsing Utils
+int		check_if_map(char *str);
+char	**read_file(char *input_file);
+int		countlines(char *input_file);
+
+// Parsing Main
+int		parser(t_game *game, char *input_file);
+int		parse_file(t_game *game, char **file);
+t_map	parse_map(char **file, int i);
+t_pixel	get_color(char *str, int count);
+t_map	get_texture(char *str);
 #endif
