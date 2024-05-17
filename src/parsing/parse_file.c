@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 21:54:29 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 21:58:46 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 			if (file[i][k] == 'N' || file[i][k] == 'S' || file[i][k] == 'E' || file[i][k] == 'W')
 			{
 				game->pos.x = k;
-				game->pos.y = i;
+				game->pos.y = j;
 				game->dir.x = 0;
 				game->dir.y = 0;
 				if (file[i][k] == 'N')
@@ -140,6 +140,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 				if (file[i][k] == 'W')
 					game->dir.x = -1;
 			}
+		}
 		j++;
 		i++;
 	}
@@ -169,7 +170,7 @@ int	parse_file(t_game *game, char **file)
 			game->ceiling = get_color(file[i], 0);
 		else if (check_if_map(file[i]))
 		{
-			game->map = *parse_map(file, i);
+			game->map = *parse_map(file, i, game);
 			break ;
 		}
 		i++;

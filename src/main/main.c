@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 21:52:22 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 21:55:21 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,6 @@ void	init_test(t_game *game)
 
 void	initialize(t_game *game)
 {
-	game->pos.x = 8.0;
-	game->pos.y = 10.0;
-	game->dir.x = 1.0;
-	game->dir.y = 0.0;
 	game->speed = 3.5;
 	game->turn_speed = 3.5;
 	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
