@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 12:11:44 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 12:57:03 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 # include "../libft/includes/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 # include <math.h>
-
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <unistd.h>
 typedef union u_pixel
 {
 	uint32_t	value;
