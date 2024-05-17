@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 16:32:20 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 21:06:10 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 # include "../libft/includes/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 # include <math.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <unistd.h>
 # include <stdio.h>
 
 typedef union u_pixel
@@ -53,5 +57,17 @@ typedef struct s_game
 	int			fov_factor;
 }	t_game;
 
-int	raycast(t_game *game);
+int		raycast(t_game *game);
+
+// Parsing Utils
+int		check_if_map(char *str);
+char	**read_file(char *input_file);
+int		countlines(char *input_file);
+
+// Parsing Main
+int		parser(t_game *game, char *input_file);
+int		parse_file(t_game *game, char **file);
+t_map	*parse_map(char **file, int i);
+t_pixel	get_color(char *str, int count);
+t_map	*get_texture(char *str);
 #endif

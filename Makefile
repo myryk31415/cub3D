@@ -13,7 +13,7 @@
 NAME = cub3D
 
 CC = cc
-CFLAGS =  $(INCLUDES) -g3 -Wall -Wextra -Werror
+CFLAGS =  $(INCLUDES) -g3
 LIBFT_DIR = libft
 LIBMLX_DIR = ./MLX42
 INCLUDES = -I./includes -I $(LIBMLX_DIR)/include/MLX42/
@@ -30,13 +30,14 @@ endif
 SRC_PATH = src
 OBJ_PATH = obj
 
-OBJ_DIRS =	parsing	raycasting
+OBJ_DIRS =	parsing	raycasting main
 
 SRCS_MAIN =	main.c
+SRCS_PARSING = parse_file.c parse_utils.c
+SRCS_RAY = raycast.c
 
-SRCS_RAY =	raycast.c
-
-SRC_NAME =											$(SRCS_MAIN)		\
+SRC_NAME =	$(addprefix main/,						$(SRCS_MAIN))		\
+			$(addprefix parsing/,					$(SRCS_PARSING))	\
 			$(addprefix raycasting/,				$(SRCS_RAY))
 
 RED = \033[1;31m
