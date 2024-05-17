@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 22:59:09 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 00:04:31 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 		pixels[i] = ft_calloc(sizeof(t_pixel), png->width);
 		while (j < png->width)
 		{
-			pixels[i][j].bytes.r = png->pixels[i * png->width + j * 4];
-			pixels[i][j].bytes.g = png->pixels[i * png->width + j * 4 + 1];
-			pixels[i][j].bytes.b = png->pixels[i * png->width + j * 4 + 2];
-			pixels[i][j].bytes.a = png->pixels[i * png->width + j * 4 + 3];
+			pixels[i][j].bytes.r = png->pixels[i * png->width * 4 + j * 4];
+			pixels[i][j].bytes.g = png->pixels[i * png->width * 4 + j * 4 + 1];
+			pixels[i][j].bytes.b = png->pixels[i * png->width * 4 + j * 4 + 2];
+			pixels[i][j].bytes.a = png->pixels[i * png->width * 4 + j * 4 + 3];
 			j++;
 		}
 	}
