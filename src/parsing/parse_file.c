@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 20:56:43 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 21:39:01 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,31 +97,40 @@ t_pixel	get_color(char *str, int count)
 
 t_map	*parse_map(char **file, int i)
 {
-	t_map	map;
+	t_map	*map;
 	int		j;
 	int		k;
 
-	map.width = ft_strlen(file[i]);
+	map = ft_calloc(sizeof(t_map), 1);
+	map->width = ft_strlen(file[i]);
 	j = i;
 	k = -1;
 	while (file[j])
 		j++;
-	map.grid = ft_calloc(sizeof(t_pixel *), j + 1);
-	if (!map.grid)
+	map->grid = ft_calloc(sizeof(t_pixel *), j + 1);
+	if (!map->grid)
 		return (ft_putstr_fd("Error\n", 2), NULL);
 	j = 0;
 	while (file[i])
 	{
-		map.grid[j] = ft_calloc(sizeof(t_pixel), ft_strlen(file[i]));
-		if (!map.grid[j])
+		map->grid[j] = ft_calloc(sizeof(t_pixel), ft_strlen(file[i]));
+		if (!map->grid[j])
 			return (ft_putstr_fd("Error\n", 2), NULL);
+		k = -1;
 		while (file[i][++k])
-			map.grid[j][k].value = ft_atoi(&file[i][k]);
+		{
+			if (file[i][k] == ' ')
+				map->grid[j][k].value = -1;
+			if (file[i][k] == '0')
+				map->grid[j][k].value = 0;
+			if (file[i][k] == '1')
+				map->grid[j][k].value = 1;
+		}
 		j++;
 		i++;
 	}
-	map.height = j;
-	return (&map);
+	map->height = j;
+	return (map);
 }
 
 int	parse_file(t_game *game, char **file)

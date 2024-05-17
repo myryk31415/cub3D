@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 20:28:21 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/17 21:42:24 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	**read_file(char *input_file)
 	while(1)
 	{
 		file[i] = get_next_line(fd);
+		file[i] = ft_strtrim(file[i], "\n");
 		if (!file[i])
 			break;
 		i++;

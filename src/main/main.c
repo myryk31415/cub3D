@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 21:06:16 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 21:40:08 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,8 @@
 
 void	init_test(t_game *game)
 {
-	game->pos.x = 2.0;
-	game->pos.y = 2.0;
 	game->map = (t_map){.width = 10, .height = 10};
 	game->map.grid = malloc(sizeof(t_pixel *) * game->map.height);
-	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
-	game->image = mlx_new_image(game->mlx, 1000, 800);
-	mlx_image_to_window(game->mlx, game->image, 0, 0);
 	for (int i = 0; i < game->map.height; i++)
 	{
 		game->map.grid[i] = ft_calloc(game->map.width, sizeof(t_pixel));
@@ -58,6 +53,29 @@ void	init_test(t_game *game)
 	game->floor.bytes.a = 255;
 }
 
+void	initialize(t_game *game)
+{
+	game->pos.x = 8.0;
+	game->pos.y = 10.0;
+	game->dir.x = 1.0;
+	game->dir.y = 0.0;
+	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
+	game->image = mlx_new_image(game->mlx, 1000, 800);
+	mlx_image_to_window(game->mlx, game->image, 0, 0);
+}
+
+void	printmap(t_game *game)
+{
+	for (int i = 0; i < game->map.height; i++)
+	{
+		for (int j = 0; j < game->map.width; j++)
+		{
+			printf("%d", game->map.grid[i][j].value);
+		}
+		printf("\n");
+	}
+}
+
 void	loop_hook(void *game)
 {
 	raycast(game);
@@ -67,9 +85,15 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
-	(void)argc;
-	(void)argv;
-	init_test(&game);
+	if (argc != 2)
+	{
+		printf("Usage: %s <map.cub>\n", argv[0]);
+		return (1);
+	}
+	parser(&game, argv[1]);
+	initialize(&game);
+	printmap(&game);
+	// init_test(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);
 	mlx_loop(game.mlx);
 	return (0);

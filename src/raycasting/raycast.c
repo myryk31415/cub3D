@@ -32,11 +32,11 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	draw_end = line_height / 2 + game->mlx->height / 2;
 	if (draw_end >= game->mlx->height)
 		draw_end = game->mlx->height - 1;
-	step = 1.0 * game->textures[0].height / line_height;
-	texPos.x = wall_x * (double)game->textures[0].width;
+	step = 1.0 * game->textures[side].height / line_height;
+	texPos.x = wall_x * (double)game->textures[side].width;
 	// why??
 	if (side <= 1 && ray_dir.y < 0)
-		texPos.x = game->textures[0].width - texPos.x;
+		texPos.x = game->textures[side].width - texPos.x;
 	// if (side > 1 && ray_dir.y < 0)
 	// 	texPos.x = game->textures[0].width - texPos.x - 1;
 	texPos.y = (draw_start - game->mlx->height / 2 + line_height / 2) * step;
@@ -48,7 +48,7 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	}
 	while (i < draw_end)
 	{
-		t_pixel	color = game->textures[0].grid[(int)texPos.y][(int)texPos.x];
+		t_pixel	color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
 		texPos.y += step;
 		if (side < 2)
 		{
