@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 21:39:01 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 21:54:29 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_pixel	get_color(char *str, int count)
 	return (color);
 }
 
-t_map	*parse_map(char **file, int i)
+t_map	*parse_map(char **file, int i, t_game *game)
 {
 	t_map	*map;
 	int		j;
@@ -120,12 +120,26 @@ t_map	*parse_map(char **file, int i)
 		while (file[i][++k])
 		{
 			if (file[i][k] == ' ')
-				map->grid[j][k].value = -1;
+				map->grid[j][k].value = 2;
 			if (file[i][k] == '0')
 				map->grid[j][k].value = 0;
 			if (file[i][k] == '1')
 				map->grid[j][k].value = 1;
-		}
+			if (file[i][k] == 'N' || file[i][k] == 'S' || file[i][k] == 'E' || file[i][k] == 'W')
+			{
+				game->pos.x = k;
+				game->pos.y = i;
+				game->dir.x = 0;
+				game->dir.y = 0;
+				if (file[i][k] == 'N')
+					game->dir.y = -1;
+				if (file[i][k] == 'S')
+					game->dir.y = 1;
+				if (file[i][k] == 'E')
+					game->dir.x = 1;
+				if (file[i][k] == 'W')
+					game->dir.x = -1;
+			}
 		j++;
 		i++;
 	}
