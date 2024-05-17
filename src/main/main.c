@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 21:40:08 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/17 21:52:22 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	initialize(t_game *game)
 	game->pos.y = 10.0;
 	game->dir.x = 1.0;
 	game->dir.y = 0.0;
+	game->speed = 3.5;
+	game->turn_speed = 3.5;
 	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
 	game->image = mlx_new_image(game->mlx, 1000, 800);
 	mlx_image_to_window(game->mlx, game->image, 0, 0);
@@ -76,8 +78,21 @@ void	printmap(t_game *game)
 	}
 }
 
+void	arrow_keys(t_game *game)
+{
+	if (mlx_is_key_down(game->mlx, MLX_KEY_UP))
+		game->pos = vec2d_add(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
+	if (mlx_is_key_down(game->mlx, MLX_KEY_DOWN))
+		game->pos = vec2d_sub(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
+	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
+		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
+	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
+		game->dir = vec2d_rot(game->dir, game->turn_speed * game->mlx->delta_time);
+}
+
 void	loop_hook(void *game)
 {
+	arrow_keys(game);
 	raycast(game);
 }
 
