@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/17 21:42:24 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 00:16:04 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,32 @@ int	check_if_map(char *str)
 		j++;
 	}
 	return (0);
+}
+
+char	*get_env(char *var)
+{
+	int			i;
+	int			j;
+	char		*tmp;
+	extern char	**environ;
+	
+	i = 0;
+	while (environ[i])
+	{
+		j = 0;
+		while (environ[i][j] && environ[i][j] != '=')
+			j++;
+		tmp = ft_substr(environ[i], 0, j);
+		if (!tmp)
+			break ;
+		if (!ft_strncmp(tmp, var, ft_strlen(var))
+			&& !ft_strncmp(tmp, var, ft_strlen(tmp)))
+		{
+			free(tmp);
+			return (ft_strdup(environ[i] + j + 1));
+		}
+		free(tmp);
+		i++;
+	}
+	return (NULL);
 }

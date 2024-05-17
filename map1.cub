@@ -1,7 +1,7 @@
-NO /Users/antonweizmann/Desktop/42Heilbronn/curriculum/cub3d/textures/wall_1.png
-SO /Users/antonweizmann/Desktop/42Heilbronn/curriculum/cub3d/textures/wall_2.png
-WE /Users/antonweizmann/Desktop/42Heilbronn/curriculum/cub3d/textures/wall_3.png
-EA /Users/antonweizmann/Desktop/42Heilbronn/curriculum/cub3d/textures/wall_4.png
+NO ./wall_1.png
+SO ./wall_2.png
+WE ./wall_3.png
+EA ./wall_4.png
 
 F 220,100,0
 C 225,30,0
