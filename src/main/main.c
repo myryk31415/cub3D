@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 23:48:09 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 00:36:52 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,26 +83,40 @@ void	printmap(t_game *game)
 
 void	key_binds(t_game *game)
 {
-	int	x;
-	int	y;
-	
+	t_vec2d	pos_tmp;
+	double	dist;
+
+	dist = game->speed * game->mlx->delta_time;
+	pos_tmp = game->pos;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
-		game->pos = vec2d_add(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
+		pos_tmp = vec2d_add(pos_tmp, vec2d_mul(game->dir, dist));
 	if (mlx_is_key_down(game->mlx, MLX_KEY_S))
-		game->pos = vec2d_sub(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
+		pos_tmp = vec2d_sub(pos_tmp, vec2d_mul(game->dir, dist));
 	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
-		game->pos = vec2d_add(game->pos, vec2d_rot(vec2d_mul(game->dir, game->speed * game->mlx->delta_time), -M_PI / 2));
+		pos_tmp = vec2d_add(pos_tmp, vec2d_rot(vec2d_mul(game->dir, dist), -M_PI / 2));
 	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
-		game->pos = vec2d_add(game->pos, vec2d_rot(vec2d_mul(game->dir, game->speed * game->mlx->delta_time), M_PI / 2));
+		pos_tmp = vec2d_add(pos_tmp, vec2d_rot(vec2d_mul(game->dir, dist), M_PI / 2));
+	if (game->map.grid[(int)pos_tmp.y][(int)pos_tmp.x].value == 0
+		&& (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0
+		|| game->map.grid[(int)game->pos.y][(int)pos_tmp.x].value == 0))
+	{
+		game->pos.x = pos_tmp.x;
+		game->pos.y = pos_tmp.y;
+	}
+	else if (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0
+		|| game->map.grid[(int)game->pos.y][(int)pos_tmp.x].value == 0)
+	{
+		if (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0)
+			game->pos.y = pos_tmp.y;
+		else
+			game->pos.x = pos_tmp.x;
+	}
 	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
 		game->dir = vec2d_rot(game->dir, game->turn_speed * game->mlx->delta_time);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
 		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(game->mlx);
-	mlx_get_mouse_pos(game->mlx, &x, &y);
-	game->dir = vec2d_rot(game->dir, (double)(x - game->mlx->width / 2) * game->turn_speed * game->mlx->delta_time / 50);
-	mlx_set_mouse_pos(game->mlx, game->mlx->width / 2, game->mlx->height / 2);
 }
 
 /*
@@ -112,8 +126,13 @@ void	key_binds(t_game *game)
 void	loop_hook(void *in)
 {
 	t_game	*game = (t_game *)in;
+	int	x;
+	int	y;
 	
 	key_binds(in);
+	mlx_get_mouse_pos(game->mlx, &x, &y);
+	game->dir = vec2d_rot(game->dir, (double)(x - game->mlx->width / 2) * game->turn_speed * game->mlx->delta_time / 50);
+	mlx_set_mouse_pos(game->mlx, game->mlx->width / 2, game->mlx->height / 2);
 	if (game->mlx->height != game->image->height || game->mlx->width != game->image->width)
 	{
 		mlx_delete_image(game->mlx, game->image);
@@ -138,8 +157,8 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	parser(&game, argv[1]);
-	initialize(&game);
 	printmap(&game);
+	initialize(&game);
 	// init_test(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);
 	mlx_loop(game.mlx);
