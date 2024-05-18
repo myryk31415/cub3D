@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 13:18:55 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 13:38:20 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,31 @@
 int	fill_map(t_map	*tex, char *tex_path, int i)
 {
 	mlx_texture_t	*png;
-	t_pixel			**pixels;
 	int				j;
 
 	png = mlx_load_png(tex_path);
 	if (!png)
 		return (ft_putstr_fd("Error\nTexture Invalid\n", 2), -1);
-	pixels = ft_calloc(sizeof(t_pixel *), png->height);
-	if (!pixels)
+	tex->grid = ft_calloc(sizeof(t_pixel *), png->height);
+	if (!tex->grid)
 		return (mlx_delete_texture(png), ft_putstr_fd("Error\nAllocation Failure", 2), -1);
 	tex->height = png->height;
 	tex->width = png->width;
 	while (++i < png->height)
 	{
 		j = 0;
-		pixels[i] = ft_calloc(sizeof(t_pixel), png->width);
-		if (!pixels)
-			return (free_str_array((void **)pixels, &tex->height), mlx_delete_texture(png), ft_putstr_fd("Error\nAllocation Failure", 2), -1);
+		tex->grid[i] = ft_calloc(sizeof(t_pixel), png->width);
+		if (!tex->grid)
+			return (free_str_array((void **)tex->grid, &tex->height), mlx_delete_texture(png), ft_putstr_fd("Error\nAllocation Failure", 2), -1);
 		while (j < png->width)
 		{
-			pixels[i][j].bytes.r = png->pixels[i * png->width * 4 + j * 4];
-			pixels[i][j].bytes.g = png->pixels[i * png->width * 4 + j * 4 + 1];
-			pixels[i][j].bytes.b = png->pixels[i * png->width * 4 + j * 4 + 2];
-			pixels[i][j].bytes.a = png->pixels[i * png->width * 4 + j * 4 + 3];
+			tex->grid[i][j].bytes.r = png->pixels[i * png->width * 4 + j * 4];
+			tex->grid[i][j].bytes.g = png->pixels[i * png->width * 4 + j * 4 + 1];
+			tex->grid[i][j].bytes.b = png->pixels[i * png->width * 4 + j * 4 + 2];
+			tex->grid[i][j].bytes.a = png->pixels[i * png->width * 4 + j * 4 + 3];
 			j++;
 		}
 	}
-	tex->grid = pixels;
 	mlx_delete_texture(png);
 	return (0);
 }
