@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 18:58:22 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 19:03:54 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		check_valid_map(t_map *map);
 // Parsing Main
 int		parser(t_game *game, char *input_file);
 int		parse_file(t_game *game, char **file);
-t_map	*parse_map(char **file, int i, t_game *game);
+t_map	parse_map(char **file, int i, t_game *game);
 t_pixel	get_color(char *str, int count, t_game *game, char **file);
 t_map	get_texture(char *str, int i, t_game *game, char **file);
 

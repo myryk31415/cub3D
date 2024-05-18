@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 18:58:46 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 19:06:32 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int	get_max_width(char **file, int i)
 {
 	int	max_width;
 
+	max_width = 0;
 	while (file[i])
 	{
 		if (ft_strlen(file[i]) > max_width)
@@ -115,40 +116,38 @@ int	get_max_width(char **file, int i)
 	return (max_width);
 }
 
-t_map	*parse_map(char **file, int i, t_game *game)
+t_map	parse_map(char **file, int i, t_game *game)
 {
-	t_map	*map;
+	t_map	map;
 	int		j;
 	int		k;
 	int		start_pos;
 
 	start_pos = 0;
-	map = ft_calloc(sizeof(t_map), 1);
-	if (!map)
-		error("Allocation Failure", game, file, map);
-	map->width = get_max_width(file, i);
+
+	map.width = get_max_width(file, i);
 	j = i;
 	k = -1;
 	while (file[j])
 		j++;
-	map->grid = ft_calloc(sizeof(t_pixel *), j + 1);
-	if (!map->grid)
-		error("Allocation Failure", game, file, map);
+	map.grid = ft_calloc(sizeof(t_pixel *), j + 1);
+	if (!map.grid)
+		error("Allocation Failure", game, file, NULL);
 	j = 0;
 	while (file[i] && file[i][0] != '\0')
 	{
-		map->grid[j] = ft_calloc(sizeof(t_pixel), map->width);
-		if (!map->grid[j])
-			error("Allocation Failure", game, file, map);
+		map.grid[j] = ft_calloc(sizeof(t_pixel), map.width);
+		if (!map.grid[j])
+			error("Allocation Failure", game, file, NULL);
 		k = -1;
-		while (++k < map->width)
+		while (++k < map.width)
 		{
 			if (file[i][k] == ' ' || !file[i][k])
-				map->grid[j][k].value = 2;
+				map.grid[j][k].value = 2;
 			else if (file[i][k] == '0')
-				map->grid[j][k].value = 0;
+				map.grid[j][k].value = 0;
 			else if (file[i][k] == '1')
-				map->grid[j][k].value = 1;
+				map.grid[j][k].value = 1;
 			else if (file[i][k] == 'N' || file[i][k] == 'S' || file[i][k] == 'E' || file[i][k] == 'W')
 			{
 				game->pos.x = k;
@@ -166,20 +165,20 @@ t_map	*parse_map(char **file, int i, t_game *game)
 					game->dir.x = -1;
 			}
 			else
-				error("Wrong charakter in map\n", game, file, map);
+				error("Wrong charakter in map\n", game, file, NULL);
 		}
 		if (file[i][0] == '\0')
 				break;
 		j++;
 		i++;
 	}
-	map->height = j;
+	map.height = j;
 	if (!start_pos)
-		error("No Players\n", game, file, map);
+		error("No Players\n", game, file, NULL);
 	if (start_pos > 1)
-		error("Too many Players\n", game, file, map);
- 	if (check_valid_map(map))
-		error("Map walls not closed\n", game, file, map);
+		error("Too many Players\n", game, file, NULL);
+ 	if (check_valid_map(&map))
+		error("Map walls not closed\n", game, file, NULL);
 	return (map);
 }
 
@@ -205,7 +204,7 @@ int	parse_file(t_game *game, char **file)
 			game->ceiling = get_color(file[i], 0, game, file);
 		else if (check_if_map(file[i]))
 		{
-			game->map = *parse_map(file, i, game);
+			game->map = parse_map(file, i, game);
 			break ;
 		}
 	}
