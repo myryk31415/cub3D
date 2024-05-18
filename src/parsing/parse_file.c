@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 18:40:03 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 18:43:00 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ int	parse_file(t_game *game, char **file)
 			game->ceiling = get_color(file[i], 0, game, file);
 		else if (check_if_map(file[i]))
 		{
-			game->map = *parse_map(file, i, game);
+			game->map = parse_map(file, i, game);
 			break ;
 		}
 	}
