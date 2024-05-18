@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 01:22:54 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 01:42:36 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ void	initialize(t_game *game)
 	mlx_set_cursor_mode(game->mlx, MLX_MOUSE_DISABLED);
 	game->image = mlx_new_image(game->mlx, 1000, 800);
 	mlx_image_to_window(game->mlx, game->image, 0, 0);
+	int x;
+	int y;
+	mlx_set_mouse_pos(game->mlx, game->mlx->width / 2, game->mlx->height / 2);
+	mlx_get_mouse_pos(game->mlx, &x, &y);
+	game->init = 5;
 }
 
 void	printmap(t_game *game)
@@ -86,6 +91,8 @@ void	key_binds(t_game *game)
 	t_vec2d	pos_tmp;
 	double	dist;
 
+	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(game->mlx);
 	dist = game->speed * game->mlx->delta_time;
 	pos_tmp = game->pos;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
@@ -113,8 +120,6 @@ void	key_binds(t_game *game)
 		game->dir = vec2d_rot(game->dir, game->turn_speed * game->mlx->delta_time);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
 		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
-	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(game->mlx);
 }
 
 /*
@@ -128,8 +133,13 @@ void	loop_hook(void *in)
 	int	y;
 	
 	key_binds(in);
-	mlx_get_mouse_pos(game->mlx, &x, &y);
-	game->dir = vec2d_rot(game->dir, (double)(x - game->mlx->width / 2) * game->turn_speed * game->mlx->delta_time / 50);
+	if (game->init == 0)
+	{
+		mlx_get_mouse_pos(game->mlx, &x, &y);
+		game->dir = vec2d_rot(game->dir, (double)(x - game->mlx->width / 2) * game->turn_speed * game->mlx->delta_time / 50);
+	}
+	else
+		game->init--;
 	mlx_set_mouse_pos(game->mlx, game->mlx->width / 2, game->mlx->height / 2);
 	if (game->mlx->height != game->image->height || game->mlx->width != game->image->width)
 	{

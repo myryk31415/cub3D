@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 23:49:45 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 01:31:47 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_game
 	float		turn_speed;
 	t_vec2d		camera_plane;
 	int			fov_factor;
+	int			init;
 }	t_game;
 
 int		raycast(t_game *game);
