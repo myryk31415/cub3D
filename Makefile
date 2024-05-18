@@ -32,7 +32,7 @@ OBJ_PATH = obj
 
 OBJ_DIRS =	parsing	raycasting main
 
-SRCS_MAIN =	main.c
+SRCS_MAIN =	main.c cleanup.c
 SRCS_PARSING = parse_file.c parse_utils.c
 SRCS_RAY = raycast.c
 

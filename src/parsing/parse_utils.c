@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 02:10:04 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 10:29:29 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	**read_file(char *input_file)
 	char	**file;
 	int		fd;
 	int		i;
+	char	*tmp;
 
 	fd = open(input_file, O_RDONLY, 0666);
 	if (fd == -1)
@@ -50,7 +51,9 @@ char	**read_file(char *input_file)
 	while(1)
 	{
 		file[i] = get_next_line(fd);
-		file[i] = ft_strtrim(file[i], "\n");
+		tmp = ft_strtrim(file[i], "\n");
+		free (file[i]);
+		file[i] = tmp;
 		if (!file[i])
 			break;
 		i++;

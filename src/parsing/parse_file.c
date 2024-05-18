@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 10:26:09 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 10:59:42 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 	{
 		j = 0;
 		pixels[i] = ft_calloc(sizeof(t_pixel), png->width);
+		if (!pixels)
+			return (free_str_array((void **)pixels),ft_putstr_fd("Error\nAllocation Failure", 2), -1);
 		while (j < png->width)
 		{
 			pixels[i][j].bytes.r = png->pixels[i * png->width * 4 + j * 4];
@@ -44,31 +46,32 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 	return (0);
 }
 
-t_map	*get_texture(char *str, int i, int j)
+t_map	*get_texture(char *str, int i, t_game *game, char **file)
 {
 	char	*texture_path;
 	t_map	*map;
-	char	*pwd;
+	int		j;
 
 	map = ft_calloc(sizeof(map), 1);
 	if (!map)
-		return (ft_putstr_fd("Error\nAllocation Failure", 2), NULL);
+		error("Allocation Failure", game, file, NULL);
 	while (str[++i])
 		if (str[i] == '/')
 			break;
 	if (!str[i])
-		return (ft_putstr_fd("Error\nWrong Texture Path", 2), NULL);
+		error("Wrong Texture Path", game, file, map);
 	j = i;
 	while (str[j] != ' ' && str[j] != '\n')
 		j++;
 	texture_path = ft_substr(str, i, j - i);
 	if (str[i - 1] == '.')
-	{
-		pwd = ft_strjoin_free(get_env("PWD"), ft_strdup("/textures"));
-		texture_path = ft_strjoin_free(pwd, texture_path);
-	}
+		texture_path = ft_strjoin_free(ft_strjoin_free(get_env("PWD"), \
+			ft_strdup("/textures")), texture_path);
 	if (fill_map(map, texture_path, -1) == -1)
-		return (NULL);
+	{
+		free(texture_path);
+		error(NULL, game, file, map);
+	}
 	return (map);
 }
 
@@ -108,6 +111,8 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	int		k;
 
 	map = ft_calloc(sizeof(t_map), 1);
+	if (!map)
+		error("Allocation Failure", game, file, map);
 	map->width = ft_strlen(file[i]);
 	j = i;
 	k = -1;
@@ -115,13 +120,13 @@ t_map	*parse_map(char **file, int i, t_game *game)
 		j++;
 	map->grid = ft_calloc(sizeof(t_pixel *), j + 1);
 	if (!map->grid)
-		return (ft_putstr_fd("Error\n", 2), NULL);
+		error("Allocation Failure", game, file, map);
 	j = 0;
 	while (file[i])
 	{
 		map->grid[j] = ft_calloc(sizeof(t_pixel), ft_strlen(file[i]));
 		if (!map->grid[j])
-			return (ft_putstr_fd("Error\n", 2), NULL);
+			error("Allocation Failure", game, file, map);
 		k = -1;
 		while (file[i][++k])
 		{
@@ -152,10 +157,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	}
 	map->height = j;
  	if (check_valid_map(map))
-	{
-		ft_putstr_fd("Error\nmap walls not closed", 2);
-		return (NULL);
-	}
+		error("map walls not closed", game, file, map);
 	return (map);
 }
 
@@ -163,18 +165,18 @@ int	parse_file(t_game *game, char **file)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	game->textures = ft_calloc(sizeof(t_map), 5);
-	while (file[i])
+	while (file[++i])
 	{
 		if (file[i][0] == 'N' && file[i][1] == 'O')
-			game->textures[0] = *get_texture(file[i], -1, 0);
+			game->textures[0] = *get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'S' && file[i][1] == 'O')
-			game->textures[1] = *get_texture(file[i], -1, 0);
+			game->textures[1] = *get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'W' && file[i][1] == 'E')
-			game->textures[2] = *get_texture(file[i], -1, 0);
+			game->textures[2] = *get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'E' && file[i][1] == 'A')
-			game->textures[3] = *get_texture(file[i], -1, 0);
+			game->textures[3] = *get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'F')
 			game->floor = get_color(file[i], 0);
 		else if (file[i][0] == 'C')
@@ -184,7 +186,6 @@ int	parse_file(t_game *game, char **file)
 			game->map = *parse_map(file, i, game);
 			break ;
 		}
-		i++;
 	}
 	return (0);
 }
@@ -194,9 +195,8 @@ int	parser(t_game *game, char *input_file)
 	char **file;
 
 	file = read_file(input_file);
-	if (file == NULL)
+	if (!file)
 		return (ft_putstr_fd("Error\n", 2), -1);
-	if (parse_file(game, file) == -1)
-		return (ft_putstr_fd("Error\n", 2), -1);
+	parse_file(game, file);
 	return (0);
 }
