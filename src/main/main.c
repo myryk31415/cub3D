@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 18:32:18 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 19:12:24 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	loop_hook(void *in)
 int	main(int argc, char **argv)
 {
 	t_game	game;
+	int		i;
 
 	if (argc != 2)
 	{
@@ -132,6 +133,11 @@ int	main(int argc, char **argv)
 	mlx_loop_hook(game.mlx, loop_hook, &game);
 	mlx_loop(game.mlx);
 	mlx_terminate(game.mlx);
-	free_arrays(&game, NULL);
+
+	i = 0;
+	while (i < 4)
+		free_str_array((void *)game.textures[i++].grid, &game.textures->height);
+		free_str_array((void *)game.map.grid, &game.map.height);
+	free(game.textures);
 	return (0);
 }
