@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 10:51:21 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 11:06:45 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ t_pixel	get_color(char *str, int count);
 t_map	*get_texture(char *str, int i, t_game *game, char **file);
 
 // Cleanup
-void	free_str_array(void **arr);
+void	free_str_array(void **arr, int *n);
 void	error(char *msg, t_game *game, char **file, t_map *map);
 #endif

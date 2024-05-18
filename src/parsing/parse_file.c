@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 10:59:42 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 11:08:26 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 		return (ft_putstr_fd("Error\nTexture Invalid\n", 2), -1);
 	pixels = ft_calloc(sizeof(t_pixel *), png->height);
 	if (!pixels)
-		return (ft_putstr_fd("Error\nAllocation Failure", 2), -1);
+		return (mlx_delete_texture(png), ft_putstr_fd("Error\nAllocation Failure", 2), -1);
 	tex->height = png->height;
 	tex->width = png->width;
 	while (++i < png->height)
@@ -31,7 +31,7 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 		j = 0;
 		pixels[i] = ft_calloc(sizeof(t_pixel), png->width);
 		if (!pixels)
-			return (free_str_array((void **)pixels),ft_putstr_fd("Error\nAllocation Failure", 2), -1);
+			return (free_str_array((void **)pixels, &tex->height), mlx_delete_texture(png), ft_putstr_fd("Error\nAllocation Failure", 2), -1);
 		while (j < png->width)
 		{
 			pixels[i][j].bytes.r = png->pixels[i * png->width * 4 + j * 4];
