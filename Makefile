@@ -51,15 +51,12 @@ OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
 all: $(NAME)
 
-$(NAME): $(LIBMLX) $(LIBFT_DIR)/libft.a $(OBJS)
+$(NAME): $(LIBFT_DIR)/libft.a $(OBJS)
 	@$(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIBMLX) $(LIBFT_DIR)/libft.a
 	@printf "%-100s\n" "$(NAME) compiled"
 
 $(LIBFT_DIR)/libft.a:
 	@make -C $(LIBFT_DIR)
-
-$(LIBMLX):
-	cd $(LIBMLX_DIR) && cmake -B build && cmake --build build -j4 --config Debug
 
 $(OBJ_PATH):
 	@mkdir -p $(OBJ_PATH)
@@ -68,6 +65,9 @@ $(OBJ_PATH):
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	@printf "%-100s\r" "$(CC) $(CFLAGS) -o $@"
 	@$(CC) $(CFLAGS) -o $@ -c $<
+
+mlx:
+	cd $(LIBMLX_DIR) && cmake -B build && cmake --build build -j4
 
 init:
 	git submodule update --init --recursive
@@ -84,7 +84,7 @@ fclean: clean
 	@make -C $(LIBFT_DIR) fclean
 	@rm -rf $(LIBMLX_DIR)/build
 
-re: fclean all
+re: fclean mlx all
 
 ascii_art:
 	@clear
