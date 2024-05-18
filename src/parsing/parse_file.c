@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 00:33:07 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 02:00:54 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,11 @@ t_map	*parse_map(char **file, int i, t_game *game)
 		i++;
 	}
 	map->height = j;
+ 	if (check_valid_map(map))
+	{
+		ft_putstr_fd("Error\nmap walls not closed", 2);
+		return (NULL);
+	}
 	return (map);
 }
 

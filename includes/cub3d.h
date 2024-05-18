@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 00:26:43 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 01:35:02 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int		check_if_map(char *str);
 char	**read_file(char *input_file);
 int		countlines(char *input_file);
 char	*get_env(char *var);
+int		check_valid_map(t_map *map);
 
 // Parsing Main
 int		parser(t_game *game, char *input_file);
