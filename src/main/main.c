@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 22:33:20 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 23:30:09 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ void	printmap(t_game *game)
 
 void	key_binds(t_game *game)
 {
+	int	x;
+	int	y;
+	
 	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
 		game->pos = vec2d_add(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
 	if (mlx_is_key_down(game->mlx, MLX_KEY_S))
@@ -96,6 +99,8 @@ void	key_binds(t_game *game)
 		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(game->mlx);
+	mlx_get_mouse_pos(game->mlx, &x, &y);
+	game->dir = vec2d_rot(game->dir, (double)(x - game->mlx->width / 2) / game->mlx->width * game->turn_speed * game->mlx->delta_time * 2);
 }
 
 /*

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 19:06:32 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 22:41:14 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,8 @@ t_map	parse_map(char **file, int i, t_game *game)
 				map.grid[j][k].value = 1;
 			else if (file[i][k] == 'N' || file[i][k] == 'S' || file[i][k] == 'E' || file[i][k] == 'W')
 			{
-				game->pos.x = k;
-				game->pos.y = j;
+				game->pos.x = k + 0.5;
+				game->pos.y = j + 0.5;
 				game->dir.x = 0;
 				game->dir.y = 0;
 				start_pos += 1;
