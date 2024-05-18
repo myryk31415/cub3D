@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 11:08:26 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 13:18:55 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_map	*get_texture(char *str, int i, t_game *game, char **file)
 	if (!str[i])
 		error("Wrong Texture Path", game, file, map);
 	j = i;
-	while (str[j] != ' ' && str[j] != '\n')
+	while (str[j] && str[j] != ' ' && str[j] != '\n')
 		j++;
 	texture_path = ft_substr(str, i, j - i);
 	if (str[i - 1] == '.')

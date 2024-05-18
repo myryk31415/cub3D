@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 13:11:04 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 13:17:52 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ char	**read_file(char *input_file)
 	char	**file;
 	int		fd;
 	int		i;
-	// char	*tmp;
 	int		lines;
 
 	lines =	countlines(input_file);
@@ -48,16 +47,13 @@ char	**read_file(char *input_file)
 	fd = open(input_file, O_RDONLY, 0666);
 	if (fd == -1)
 		return (ft_putstr_fd("Error\n", 2), NULL);
-	file = ft_calloc(sizeof(char *), lines);
+	file = ft_calloc(sizeof(char *), lines + 1);
 	if (!file)
 		return (close(fd), ft_putstr_fd("Error\n", 2), NULL);
 	i = 0;
 	while(i < lines)
 	{
 		file[i] = get_next_line(fd);
-		// tmp = ft_strtrim(file[i], "\n");
-		// free (file[i]);
-		// file[i] = tmp;
 		file[i][ft_strlen(file[i]) - 1] = '\0';
 		if (!file[i])
 			break;
