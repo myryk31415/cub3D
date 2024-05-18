@@ -51,15 +51,15 @@ OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
 all: $(NAME)
 
-$(NAME): $(LIBFT_DIR)/libft.a $(LIBMLX_DIR) $(OBJS)
+$(NAME): $(LIBMLX) $(LIBFT_DIR)/libft.a $(OBJS)
 	@$(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIBMLX) $(LIBFT_DIR)/libft.a
 	@printf "%-100s\n" "$(NAME) compiled"
 
 $(LIBFT_DIR)/libft.a:
 	@make -C $(LIBFT_DIR)
 
-$(LIBMLX_DIR):
-	cd $(LIBMLX_DIR) && cmake -B build && cmake --build build -j4
+$(LIBMLX):
+	cd $(LIBMLX_DIR) && cmake -B build && cmake --build build -j4 --config Debug
 
 $(OBJ_PATH):
 	@mkdir -p $(OBJ_PATH)
@@ -82,6 +82,7 @@ clean:
 fclean: clean
 	@rm -f $(NAME)
 	@make -C $(LIBFT_DIR) fclean
+	@rm -rf $(LIBMLX_DIR)/build
 
 re: fclean all
 

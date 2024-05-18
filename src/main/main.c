@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 19:12:24 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 19:17:29 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ int	main(int argc, char **argv)
 	// init_test(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);
 	mlx_loop(game.mlx);
+	mlx_delete_image(game.mlx, game.image);
+	mlx_close_window(game.mlx);
 	mlx_terminate(game.mlx);
 
 	i = 0;
