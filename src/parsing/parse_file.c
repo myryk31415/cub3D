@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 14:46:46 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 14:52:06 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,11 +130,11 @@ t_map	*parse_map(char **file, int i, t_game *game)
 		{
 			if (file[i][k] == ' ')
 				map->grid[j][k].value = 2;
-			if (file[i][k] == '0')
+			else if (file[i][k] == '0')
 				map->grid[j][k].value = 0;
-			if (file[i][k] == '1')
+			else if (file[i][k] == '1')
 				map->grid[j][k].value = 1;
-			if (file[i][k] == 'N' || file[i][k] == 'S' || file[i][k] == 'E' || file[i][k] == 'W')
+			else if (file[i][k] == 'N' || file[i][k] == 'S' || file[i][k] == 'E' || file[i][k] == 'W')
 			{
 				game->pos.x = k;
 				game->pos.y = j;
@@ -150,14 +150,17 @@ t_map	*parse_map(char **file, int i, t_game *game)
 				if (file[i][k] == 'W')
 					game->dir.x = -1;
 			}
+			else if (file[i][k] != '\n')
+				error("Wrong charakter in map\n", game, file, map);
 		}
 		j++;
 		i++;
 	}
 	map->height = j;
+	if (!start_pos)
+		error("No startposition\n", game, file, map);
  	if (check_valid_map(map))
-		error("map walls not closed\n", game, file, map);
-		error("map walls not closed\n", game, file, map);
+		error("Map walls not closed\n", game, file, map);
 	return (map);
 }
 
