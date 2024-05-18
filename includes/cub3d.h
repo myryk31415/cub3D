@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 19:03:54 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 23:49:45 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@
 # include <sys/uio.h>
 # include <unistd.h>
 # include <stdio.h>
+
+# ifndef SPEED
+#  define SPEED 3.5
+# endif
+
+# ifndef TURN_SPEED
+#  define TURN_SPEED 3.5
+# endif
+
+# ifndef WALL_HEIGHT
+#  define WALL_HEIGHT 0.5
+# endif
 
 typedef union u_pixel
 {
