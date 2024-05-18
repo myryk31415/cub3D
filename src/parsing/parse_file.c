@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 13:38:20 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 14:00:41 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_map	*get_texture(char *str, int i, t_game *game, char **file)
 	t_map	*map;
 	int		j;
 
-	map = ft_calloc(sizeof(map), 1);
+	map = ft_calloc(sizeof(t_map), 1);
 	if (!map)
 		error("Allocation Failure", game, file, NULL);
 	while (str[++i])
@@ -70,6 +70,7 @@ t_map	*get_texture(char *str, int i, t_game *game, char **file)
 		free(texture_path);
 		error(NULL, game, file, map);
 	}
+	free(texture_path);
 	return (map);
 }
 

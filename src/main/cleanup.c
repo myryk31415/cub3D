@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 10:39:56 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 11:06:25 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 14:04:22 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free_str_array(void **arr, int *n)
 	if (!arr)
 		return ;
 	if (n)
-		while (arr[i] && i < *n)
+		while (i < *n)
 			free(arr[i++]);
 	else
 		while (arr[i])
