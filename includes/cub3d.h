@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 18:43:10 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 18:58:22 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_game
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
-	t_map		*map;
+	t_map		map;
 	t_map		*textures;
 	t_pixel		ceiling;
 	t_pixel		floor;
