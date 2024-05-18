@@ -33,11 +33,8 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 		draw_end = game->mlx->height - 1;
 	step = 1.0 * game->textures[side].height / line_height;
 	texPos.x = wall_x * (double)game->textures[side].width;
-	// why??
 	if (side <= 1 && ray_dir.y < 0)
 		texPos.x = game->textures[side].width - texPos.x - 1;
-	// if (side > 1 && ray_dir.y < 0)
-	// 	texPos.x = game->textures[0].width - texPos.x - 1;
 	texPos.y = (draw_start - game->mlx->height / 2 + line_height / 2) * step;
 	i = 0;
 	while (i < draw_start)
@@ -49,11 +46,6 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	{
 		t_pixel	color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
 		texPos.y += step;
-		if (side < 2)
-		{
-			color.bytes.r /= 3;
-			color.bytes.g /= 3;
-		}
 		mlx_put_pixel(game->image, x, i, color.value);
 		i++;
 	}
@@ -65,6 +57,11 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	return (0);
 }
 
+/*
+ *@brief Draws a vertical black line.
+ *@param game The game structure.
+ *@param x The screen x coordinate.
+*/
 void	black_line(t_game *game, int x)
 {
 	int	i;
@@ -77,6 +74,64 @@ void	black_line(t_game *game, int x)
 	}
 }
 
+int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d side_dist, t_vec2d delta_dist, t_game *game)
+{
+	double	wall_dist;
+	double	wall_x;
+	double angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
+	double angle2 = fabs(vec2d_getrot(ray_dir));
+	if (side < 2)
+	{
+		wall_dist = cos(angle) * (side_dist.x - delta_dist.x);
+		wall_x = game->pos.y * (1 - 2 * (ray_dir.y < 0)) + sin(angle2) * (side_dist.x - delta_dist.x);
+	}
+	else
+	{
+		wall_dist = cos(angle) * (side_dist.y - delta_dist.y);
+		wall_x = game->pos.x + cos(angle2) * (side_dist.y - delta_dist.y);
+	}
+	wall_x -= floor(wall_x);
+	return (draw_line(x, side, wall_dist, wall_x, ray_dir, game));
+}
+
+int	cast_loop(int map_x, int map_y, int x, t_vec2d step, t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *game)
+{
+	int		side;
+	int		hit;
+
+	hit = 0;
+	while (!hit)
+	{
+		if (side_dist->x < side_dist->y)
+		{
+			side_dist->x += delta_dist.x;
+			map_x += step.x;
+			side = 0;
+			if (ray_dir.x < 0)
+				side = 1;
+		}
+		else
+		{
+			side_dist->y += delta_dist.y;
+			map_y += step.y;
+			side = 2;
+			if (ray_dir.y < 0)
+				side = 3;
+		}
+		if (map_x < 0 && ray_dir.x <= 0)
+			return (black_line(game, x), -1);
+		if (map_x >= game->map.width && ray_dir.x >= 0)
+			return (black_line(game, x), -1);
+		if (map_y < 0 && ray_dir.y <= 0)
+			return (black_line(game, x), -1);
+		if (map_y >= game->map.height && ray_dir.y >= 0)
+			return (black_line(game, x), -1);
+		if (map_y >= 0 && map_y < game->map.height && map_x >= 0 && map_x < game->map.width && game->map.grid[map_y][map_x].value)
+			hit = 1;
+	}
+	return (side);
+}
+
 int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 {
 	int		map_x;
@@ -84,18 +139,12 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 	t_vec2d	delta_dist;
 	t_vec2d	side_dist;
 	t_vec2d	step;
-	int		hit;
 	int		side;
-	double	wall_dist;
-	double	len;
-	double	wall_x;
 
-	hit = 0;
 	map_x = (int)game->pos.x;
 	map_y = (int)game->pos.y;
-	len = vec2d_len(ray_dir);
-	delta_dist.x = fabs(len / ray_dir.x);
-	delta_dist.y = fabs(len / ray_dir.y);
+	delta_dist.x = fabs(vec2d_len(ray_dir) / ray_dir.x);
+	delta_dist.y = fabs(vec2d_len(ray_dir) / ray_dir.y);
 	if (ray_dir.x < 0)
 	{
 		step.x = -1;
@@ -116,60 +165,22 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 		step.y = 1;
 		side_dist.y = (map_y + 1.0 - game->pos.y) * delta_dist.y;
 	}
-	while (!hit)
-	{
-		if (side_dist.x < side_dist.y)
-		{
-			side_dist.x += delta_dist.x;
-			map_x += step.x;
-			side = 0;
-			if (ray_dir.x < 0)
-				side = 1;
-		}
-		else
-		{
-			side_dist.y += delta_dist.y;
-			map_y += step.y;
-			side = 2;
-			if (ray_dir.y < 0)
-				side = 3;
-		}
-		if (map_x < 0 && ray_dir.x <= 0)
-			return (black_line(game, x), 0);
-		if (map_x >= game->map.width && ray_dir.x >= 0)
-			return (black_line(game, x), 0);
-		if (map_y < 0 && ray_dir.y <= 0)
-			return (black_line(game, x), 0);
-		if (map_y >= game->map.height && ray_dir.y >= 0)
-			return (black_line(game, x), 0);
-		if (map_y >= 0 && map_y < game->map.height && map_x >= 0 && map_x < game->map.width && game->map.grid[map_y][map_x].value)
-			hit = 1;
-	}
-	double angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
-	double angle2 = fabs(vec2d_getrot(ray_dir));
-	if (side < 2)
-	{
-		wall_dist = cos(angle) * (side_dist.x - delta_dist.x);
-		wall_x = game->pos.y * (1 - 2 * (ray_dir.y < 0)) + sin(angle2) * (side_dist.x - delta_dist.x);
-	}
-	else
-	{
-		wall_dist = cos(angle) * (side_dist.y - delta_dist.y);
-		wall_x = game->pos.x + cos(angle2) * (side_dist.y - delta_dist.y);
-	}
-	wall_x -= floor(wall_x);
-	// if (x == 200 || x == 600)
-	// 	printf("x: %d, wall_x: %f, angle2: %f, side_dist: %f\n", x, wall_x, angle2, side_dist.x -delta_dist.x);
-	return (draw_line(x, side, wall_dist, wall_x, ray_dir, game));
+	side = cast_loop(map_x, map_y, x, step, ray_dir, delta_dist, &side_dist, game);
+	if (side == -1)
+		return (0);
+	return (calc_wall_dist(x, side, ray_dir, side_dist, delta_dist, game));
 }
 
+/*
+ *@brief Raycaster, calculates walls, ceiling, floor.
+ *@param game The game structure.
+*/
 int	raycast(t_game *game)
 {
 	t_vec2d	ray_dir;
 	int		x;
 	double	offset;
 
-	game->fov_factor = 1;
 	game->camera_plane = vec2d_rot(game->dir, M_PI / 2);
 	game->camera_plane = vec2d_mul(game->camera_plane, 1.0 / game->fov_factor);
 	x = 0;

@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 22:28:50 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 01:18:07 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,15 @@ void	init_test(t_game *game)
 	game->floor.bytes.a = 255;
 }
 
+/*
+ *@brief Sets speed, turn_speed, fov_factor, mlx, and image.
+ *@param game The game structure to initialize.
+*/
 void	initialize(t_game *game)
 {
 	game->speed = 3.5;
 	game->turn_speed = 3.5;
+	game->fov_factor = 1;
 	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
 	game->image = mlx_new_image(game->mlx, 1000, 800);
 	mlx_image_to_window(game->mlx, game->image, 0, 0);
@@ -86,12 +91,20 @@ void	arrow_keys(t_game *game)
 		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
 }
 
+/*
+ *@brief Function that gets executed every frame.
+ *@param game The game structure.
+*/
 void	loop_hook(void *game)
 {
 	arrow_keys(game);
 	raycast(game);
 }
 
+/*
+ *@brief A raycasting engine inspired by Wolfenstein 3D.
+ *@param argv Path to the map file.
+*/
 int	main(int argc, char **argv)
 {
 	t_game	game;
