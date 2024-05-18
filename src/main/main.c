@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 19:17:29 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 22:33:20 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,14 @@ void	printmap(t_game *game)
 
 void	key_binds(t_game *game)
 {
-	if (mlx_is_key_down(game->mlx, MLX_KEY_UP))
+	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
 		game->pos = vec2d_add(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
-	if (mlx_is_key_down(game->mlx, MLX_KEY_DOWN))
+	if (mlx_is_key_down(game->mlx, MLX_KEY_S))
 		game->pos = vec2d_sub(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
+	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
+		game->pos = vec2d_add(game->pos, vec2d_rot(vec2d_mul(game->dir, game->speed * game->mlx->delta_time), -M_PI / 2));
+	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
+		game->pos = vec2d_add(game->pos, vec2d_rot(vec2d_mul(game->dir, game->speed * game->mlx->delta_time), M_PI / 2));
 	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
 		game->dir = vec2d_rot(game->dir, game->turn_speed * game->mlx->delta_time);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
