@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 17:56:16 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 18:30:10 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_game
 	t_pixel		floor;
 	t_vec2d		pos;
 	t_vec2d		dir;
+	double		wall_height;
 	double		speed;
 	float		turn_speed;
 	t_vec2d		camera_plane;
@@ -75,5 +76,6 @@ t_map	get_texture(char *str, int i, t_game *game, char **file);
 
 // Cleanup
 void	free_str_array(void **arr, int *n);
+void	free_arrays(t_game *game, t_map *map);
 void	error(char *msg, t_game *game, char **file, t_map *map);
 #endif

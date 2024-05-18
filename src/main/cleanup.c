@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 10:39:56 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 14:21:27 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 18:29:37 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,11 @@ void	free_str_array(void **arr, int *n)
 	free(arr);
 }
 
-void	error(char *msg, t_game *game, char **file, t_map *map)
+void	free_arrays(t_game *game, t_map *map)
 {
 	int		i;
-	char	*tmp;
 
 	i = 0;
-	
-	if (msg)
-	{
-		tmp = ft_strjoin("Error\n", msg);
-		ft_putstr_fd(tmp, 2);
-		free(tmp);
-	}
 	while (i < 4)
 		free_str_array((void *)game->textures[i++].grid, &game->textures->height);
 	if (map)
@@ -50,6 +42,19 @@ void	error(char *msg, t_game *game, char **file, t_map *map)
 		free(map);
 	}
 	free(game->textures);
+}
+
+void	error(char *msg, t_game *game, char **file, t_map *map)
+{
+	char	*tmp;
+	
+	if (msg)
+	{
+		tmp = ft_strjoin("Error\n", msg);
+		ft_putstr_fd(tmp, 2);
+		free(tmp);
+	}
+	free_arrays(game, map);
 	free_str_array((void *)file, NULL);
 	exit (1);
 }

@@ -22,7 +22,7 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	t_vec2d texPos;
 
 	if (wall_dist > 0)
-		line_height = (int)(game->mlx->height / wall_dist);
+		line_height = (int)(game->mlx->width * game->wall_height / wall_dist);
 	else
 		line_height = game->mlx->height;
 	draw_start = -line_height / 2 + game->mlx->height / 2;
@@ -34,7 +34,9 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 	step = 1.0 * game->textures[side].height / line_height;
 	texPos.x = wall_x * (double)game->textures[side].width;
 	if (side <= 1 && ray_dir.y < 0)
-		texPos.x = game->textures[side].width - texPos.x - 1;
+		texPos.x = game->textures[side].width - texPos.x;
+	// if (side > 2 && ray_dir.x > 0)
+	// 	texPos.x = game->textures[side].width - texPos.x;
 	texPos.y = (draw_start - game->mlx->height / 2 + line_height / 2) * step;
 	i = 0;
 	while (i < draw_start)
@@ -131,7 +133,7 @@ int	cast_loop(int map_x, int map_y, int x, t_vec2d step, t_vec2d ray_dir, t_vec2
 			return (empty_line(game, x), -1);
 		if (map_y >= game->map.height && ray_dir.y >= 0)
 			return (empty_line(game, x), -1);
-		if (map_y >= 0 && map_y < game->map.height && map_x >= 0 && map_x < game->map.width && game->map.grid[map_y][map_x].value)
+		if (map_y >= 0 && map_y < game->map.height && map_x >= 0 && map_x < game->map.width && game->map.grid[map_y][map_x].value == 1)
 			hit = 1;
 	}
 	return (side);

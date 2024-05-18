@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 01:18:07 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 18:32:18 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	initialize(t_game *game)
 {
 	game->speed = 3.5;
 	game->turn_speed = 3.5;
+	game->wall_height = 0.5;
 	game->fov_factor = 1;
 	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
 	game->image = mlx_new_image(game->mlx, 1000, 800);
@@ -79,7 +80,7 @@ void	printmap(t_game *game)
 	}
 }
 
-void	arrow_keys(t_game *game)
+void	key_binds(t_game *game)
 {
 	if (mlx_is_key_down(game->mlx, MLX_KEY_UP))
 		game->pos = vec2d_add(game->pos, vec2d_mul(game->dir, game->speed * game->mlx->delta_time));
@@ -89,16 +90,26 @@ void	arrow_keys(t_game *game)
 		game->dir = vec2d_rot(game->dir, game->turn_speed * game->mlx->delta_time);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
 		game->dir = vec2d_rot(game->dir, -game->turn_speed * game->mlx->delta_time);
+	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(game->mlx);
 }
 
 /*
  *@brief Function that gets executed every frame.
  *@param game The game structure.
 */
-void	loop_hook(void *game)
+void	loop_hook(void *in)
 {
-	arrow_keys(game);
-	raycast(game);
+	t_game	*game = (t_game *)in;
+	
+	key_binds(in);
+	if (game->mlx->height != game->image->height || game->mlx->width != game->image->width)
+	{
+		mlx_delete_image(game->mlx, game->image);
+		game->image = mlx_new_image(game->mlx, game->mlx->width, game->mlx->height);
+		mlx_image_to_window(game->mlx, game->image, 0, 0);
+	}
+	raycast(in);
 }
 
 /*
@@ -120,5 +131,7 @@ int	main(int argc, char **argv)
 	// init_test(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);
 	mlx_loop(game.mlx);
+	mlx_terminate(game.mlx);
+	free_arrays(&game, NULL);
 	return (0);
 }
