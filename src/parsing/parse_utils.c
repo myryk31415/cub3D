@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 13:17:52 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 16:59:26 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char	**read_file(char *input_file)
 			break;
 		i++;
 	}
+	file[lines] = NULL;
 	close(fd);
 	return (file);
 }
@@ -116,9 +117,9 @@ int	check_valid_map(t_map *map)
 	{
 		k = 0;
 		j = map->height - 1;
-		while (map->grid[k][i].value == 2)
+		while (k < map->height - 1 && map->grid[k][i].value == 2)
 			k++;
-		while (map->grid[j][i].value == 2)
+		while (j > k && map->grid[j][i].value == 2)
 			j--;
 		if (j <= 1 || !map->grid[k][i].value || !map->grid[j][i].value)
 			return (1);
@@ -126,9 +127,9 @@ int	check_valid_map(t_map *map)
 		{
 			k = 0;
 			j = map->width - 1;
-			while (map->grid[i][k].value == 2)
+			while (k < map->width - 1 && map->grid[i][k].value == 2)
 				k++;
-			while (map->grid[i][j].value == 2)
+			while (j > k && map->grid[i][j].value == 2)
 				j--;
 			if (j <= 1 || !map->grid[i][j].value || !map->grid[i][k].value)
 				return (1);

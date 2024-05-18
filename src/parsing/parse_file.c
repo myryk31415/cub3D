@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 14:52:06 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 17:00:32 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,19 @@ t_pixel	get_color(char *str, int count)
 	return (color);
 }
 
+int	get_max_width(char **file, int i)
+{
+	int	max_width;
+
+	while (file[i])
+	{
+		if (ft_strlen(file[i]) > max_width)
+			max_width = ft_strlen(file[i]);
+		i++;
+	}
+	return (max_width);
+}
+
 t_map	*parse_map(char **file, int i, t_game *game)
 {
 	t_map	*map;
@@ -111,7 +124,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	map = ft_calloc(sizeof(t_map), 1);
 	if (!map)
 		error("Allocation Failure", game, file, map);
-	map->width = ft_strlen(file[i]);
+	map->width = get_max_width(file, i);
 	j = i;
 	k = -1;
 	while (file[j])
@@ -120,15 +133,15 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	if (!map->grid)
 		error("Allocation Failure", game, file, map);
 	j = 0;
-	while (file[i])
+	while (file[i] && file[i][0] != '\0')
 	{
-		map->grid[j] = ft_calloc(sizeof(t_pixel), ft_strlen(file[i]));
+		map->grid[j] = ft_calloc(sizeof(t_pixel), map->width);
 		if (!map->grid[j])
 			error("Allocation Failure", game, file, map);
 		k = -1;
-		while (file[i][++k])
+		while (++k < map->width)
 		{
-			if (file[i][k] == ' ')
+			if (file[i][k] == ' ' || !file[i][k])
 				map->grid[j][k].value = 2;
 			else if (file[i][k] == '0')
 				map->grid[j][k].value = 0;
@@ -150,9 +163,11 @@ t_map	*parse_map(char **file, int i, t_game *game)
 				if (file[i][k] == 'W')
 					game->dir.x = -1;
 			}
-			else if (file[i][k] != '\n')
+			else
 				error("Wrong charakter in map\n", game, file, map);
 		}
+		if (file[i][0] == '\0')
+				break;
 		j++;
 		i++;
 	}
