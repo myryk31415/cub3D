@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 14:00:41 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 14:06:35 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,17 @@ int	fill_map(t_map	*tex, char *tex_path, int i)
 	return (0);
 }
 
-t_map	*get_texture(char *str, int i, t_game *game, char **file)
+t_map	get_texture(char *str, int i, t_game *game, char **file)
 {
 	char	*texture_path;
-	t_map	*map;
+	t_map	map;
 	int		j;
 
-	map = ft_calloc(sizeof(t_map), 1);
-	if (!map)
-		error("Allocation Failure", game, file, NULL);
 	while (str[++i])
 		if (str[i] == '/')
 			break;
 	if (!str[i])
-		error("Wrong Texture Path", game, file, map);
+		error("Wrong Texture Path", game, file, NULL);
 	j = i;
 	while (str[j] && str[j] != ' ' && str[j] != '\n')
 		j++;
@@ -65,10 +62,10 @@ t_map	*get_texture(char *str, int i, t_game *game, char **file)
 	if (str[i - 1] == '.')
 		texture_path = ft_strjoin_free(ft_strjoin_free(get_env("PWD"), \
 			ft_strdup("/textures")), texture_path);
-	if (fill_map(map, texture_path, -1) == -1)
+	if (fill_map(&map, texture_path, -1) == -1)
 	{
 		free(texture_path);
-		error(NULL, game, file, map);
+		error(NULL, game, file, NULL);
 	}
 	free(texture_path);
 	return (map);
@@ -169,13 +166,13 @@ int	parse_file(t_game *game, char **file)
 	while (file[++i])
 	{
 		if (file[i][0] == 'N' && file[i][1] == 'O')
-			game->textures[0] = *get_texture(file[i], -1, game, file);
+			game->textures[0] = get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'S' && file[i][1] == 'O')
-			game->textures[1] = *get_texture(file[i], -1, game, file);
+			game->textures[1] = get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'W' && file[i][1] == 'E')
-			game->textures[2] = *get_texture(file[i], -1, game, file);
+			game->textures[2] = get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'E' && file[i][1] == 'A')
-			game->textures[3] = *get_texture(file[i], -1, game, file);
+			game->textures[3] = get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'F')
 			game->floor = get_color(file[i], 0);
 		else if (file[i][0] == 'C')
