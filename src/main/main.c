@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/18 22:33:20 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 22:50:56 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < 4)
 		free_str_array((void *)game.textures[i++].grid, &game.textures->height);
-		free_str_array((void *)game.map.grid, &game.map.height);
+	free_str_array((void *)game.map.grid, &game.map.height);
 	free(game.textures);
 	return (0);
 }
