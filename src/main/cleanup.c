@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 10:39:56 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 14:17:23 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 14:21:27 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,17 @@ void	free_str_array(void **arr, int *n)
 
 void	error(char *msg, t_game *game, char **file, t_map *map)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
 	i = 0;
 	
 	if (msg)
-		ft_putstr_fd(ft_strjoin_free(ft_strdup("Error\n"), msg), 2);
+	{
+		tmp = ft_strjoin("Error\n", msg);
+		ft_putstr_fd(tmp, 2);
+		free(tmp);
+	}
 	while (i < 4)
 		free_str_array((void *)game->textures[i++].grid, &game->textures->height);
 	if (map)

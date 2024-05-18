@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 14:06:35 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 14:21:36 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	}
 	map->height = j;
  	if (check_valid_map(map))
-		error("map walls not closed", game, file, map);
+		error("map walls not closed\n", game, file, map);
 	return (map);
 }
 
