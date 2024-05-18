@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 02:00:54 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 10:26:09 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,21 +81,22 @@ t_pixel	get_color(char *str, int count)
 
 	color.bytes.a = 255;
 	i = -1;
-	j = i;
 	while (str[++i])
-		if (ft_isdigit(str[j]))
+		if (ft_isdigit(str[i]))
 		{
+			j = i;
 			while (ft_isdigit(str[j]))
 				j++;
 			tmp = ft_substr(str, i, j - i);
 			if (count == 0)
-				color.bytes.r = ft_atoi(tmp);
+				color.bytes.r = (uint8_t)ft_atoi(tmp);
 			else if (count == 1)
-				color.bytes.g = ft_atoi(tmp);
+				color.bytes.g = (uint8_t)ft_atoi(tmp);
 			else if (count == 2)
-				color.bytes.b = ft_atoi(tmp);
+				color.bytes.b = (uint8_t)ft_atoi(tmp);
 			count++;
 			free(tmp);
+			i = j;
 		}
 	return (color);
 }
