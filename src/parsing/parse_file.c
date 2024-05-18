@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 17:59:40 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 18:05:01 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ int	parser(t_game *game, char *input_file)
 
 	file = read_file(input_file);
 	if (!file)
-		return (ft_putstr_fd("Error\n", 2), -1);
+		exit(1);
 	parse_file(game, file);
 	return (0);
 }

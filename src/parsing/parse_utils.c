@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 16:59:26 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 18:07:51 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	countlines(char *input_file)
 	lines = 0;
 	fd = open(input_file, O_RDONLY, 0666);
 	if (fd == -1)
-		return (ft_putstr_fd("Error\n", 2), -1);
+		return (ft_putstr_fd("Error\nWrong Map\n", 2), -1);
 	while(1)
 	{
 		tmp = get_next_line(fd);
@@ -46,10 +46,10 @@ char	**read_file(char *input_file)
 		return (NULL);
 	fd = open(input_file, O_RDONLY, 0666);
 	if (fd == -1)
-		return (ft_putstr_fd("Error\n", 2), NULL);
+		return (ft_putstr_fd("Error\nWrong Map\n", 2), NULL);
 	file = ft_calloc(sizeof(char *), lines + 1);
 	if (!file)
-		return (close(fd), ft_putstr_fd("Error\n", 2), NULL);
+		return (close(fd), ft_putstr_fd("Error\nAllocation Failure\n", 2), NULL);
 	i = 0;
 	while(i < lines)
 	{
@@ -60,8 +60,7 @@ char	**read_file(char *input_file)
 		i++;
 	}
 	file[lines] = NULL;
-	close(fd);
-	return (file);
+	return (close(fd), file);
 }
 
 int	check_if_map(char *str)
