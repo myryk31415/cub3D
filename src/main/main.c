@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 00:36:52 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 01:22:54 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,15 @@ void	key_binds(t_game *game)
 		pos_tmp = vec2d_add(pos_tmp, vec2d_rot(vec2d_mul(game->dir, dist), -M_PI / 2));
 	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
 		pos_tmp = vec2d_add(pos_tmp, vec2d_rot(vec2d_mul(game->dir, dist), M_PI / 2));
-	if (game->map.grid[(int)pos_tmp.y][(int)pos_tmp.x].value == 0
-		&& (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0
-		|| game->map.grid[(int)game->pos.y][(int)pos_tmp.x].value == 0))
-	{
-		game->pos.x = pos_tmp.x;
-		game->pos.y = pos_tmp.y;
-	}
-	else if (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0
+	if (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0
 		|| game->map.grid[(int)game->pos.y][(int)pos_tmp.x].value == 0)
 	{
-		if (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0)
+		if (game->map.grid[(int)pos_tmp.y][(int)pos_tmp.x].value == 0)
+		{
+			game->pos.x = pos_tmp.x;
+			game->pos.y = pos_tmp.y;
+		}
+		else if (game->map.grid[(int)pos_tmp.y][(int)game->pos.x].value == 0)
 			game->pos.y = pos_tmp.y;
 		else
 			game->pos.x = pos_tmp.x;
