@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 17:00:32 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 17:59:40 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_map	get_texture(char *str, int i, t_game *game, char **file)
 	return (map);
 }
 
-t_pixel	get_color(char *str, int count)
+t_pixel	get_color(char *str, int count, t_game *game, char **file)
 {
 	int		i;
 	int		j;
@@ -97,6 +97,8 @@ t_pixel	get_color(char *str, int count)
 			free(tmp);
 			i = j;
 		}
+	if (count < 3)
+		error("RGB Colors missing\n", game, file, NULL);
 	return (color);
 }
 
@@ -153,7 +155,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 				game->pos.y = j;
 				game->dir.x = 0;
 				game->dir.y = 0;
-				start_pos = 1;
+				start_pos += 1;
 				if (file[i][k] == 'N')
 					game->dir.y = -1;
 				if (file[i][k] == 'S')
@@ -173,7 +175,9 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	}
 	map->height = j;
 	if (!start_pos)
-		error("No startposition\n", game, file, map);
+		error("No Players\n", game, file, map);
+	if (start_pos > 1)
+		error("Too many Players\n", game, file, map);
  	if (check_valid_map(map))
 		error("Map walls not closed\n", game, file, map);
 	return (map);
@@ -196,9 +200,9 @@ int	parse_file(t_game *game, char **file)
 		else if (file[i][0] == 'E' && file[i][1] == 'A')
 			game->textures[3] = get_texture(file[i], -1, game, file);
 		else if (file[i][0] == 'F')
-			game->floor = get_color(file[i], 0);
+			game->floor = get_color(file[i], 0, game, file);
 		else if (file[i][0] == 'C')
-			game->ceiling = get_color(file[i], 0);
+			game->ceiling = get_color(file[i], 0, game, file);
 		else if (check_if_map(file[i]))
 		{
 			game->map = *parse_map(file, i, game);
