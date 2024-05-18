@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 18:38:04 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/18 18:40:03 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ int	parse_file(t_game *game, char **file)
 			break ;
 		}
 	}
-	free_str_array(file, NULL);
+	free_str_array((void **)file, NULL);
 	return (0);
 }
 
