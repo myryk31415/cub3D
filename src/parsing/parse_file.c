@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 14:21:36 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/18 14:46:46 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,9 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	t_map	*map;
 	int		j;
 	int		k;
+	int		start_pos;
 
+	start_pos = 0;
 	map = ft_calloc(sizeof(t_map), 1);
 	if (!map)
 		error("Allocation Failure", game, file, map);
@@ -138,6 +140,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 				game->pos.y = j;
 				game->dir.x = 0;
 				game->dir.y = 0;
+				start_pos = 1;
 				if (file[i][k] == 'N')
 					game->dir.y = -1;
 				if (file[i][k] == 'S')
@@ -153,6 +156,7 @@ t_map	*parse_map(char **file, int i, t_game *game)
 	}
 	map->height = j;
  	if (check_valid_map(map))
+		error("map walls not closed\n", game, file, map);
 		error("map walls not closed\n", game, file, map);
 	return (map);
 }
