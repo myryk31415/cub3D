@@ -62,14 +62,19 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
  *@param game The game structure.
  *@param x The screen x coordinate.
 */
-void	black_line(t_game *game, int x)
+void	empty_line(t_game *game, int x)
 {
 	int	i;
 
 	i = 0;
+	while (i < game->mlx->height / 2)
+	{
+		mlx_put_pixel(game->image, x, i, game->ceiling.value);
+		i++;
+	}
 	while (i < game->mlx->height)
 	{
-		mlx_put_pixel(game->image, x, i, 0x000000FF);
+		mlx_put_pixel(game->image, x, i, game->floor.value);
 		i++;
 	}
 }
@@ -119,13 +124,13 @@ int	cast_loop(int map_x, int map_y, int x, t_vec2d step, t_vec2d ray_dir, t_vec2
 				side = 3;
 		}
 		if (map_x < 0 && ray_dir.x <= 0)
-			return (black_line(game, x), -1);
+			return (empty_line(game, x), -1);
 		if (map_x >= game->map.width && ray_dir.x >= 0)
-			return (black_line(game, x), -1);
+			return (empty_line(game, x), -1);
 		if (map_y < 0 && ray_dir.y <= 0)
-			return (black_line(game, x), -1);
+			return (empty_line(game, x), -1);
 		if (map_y >= game->map.height && ray_dir.y >= 0)
-			return (black_line(game, x), -1);
+			return (empty_line(game, x), -1);
 		if (map_y >= 0 && map_y < game->map.height && map_x >= 0 && map_x < game->map.width && game->map.grid[map_y][map_x].value)
 			hit = 1;
 	}
