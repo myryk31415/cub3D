@@ -2,7 +2,7 @@ cub3D
 *test*
 .vscode
 vgcore.*
-map1.cub
+*.cub
 
 # Prerequisites
 *.d

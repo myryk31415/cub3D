@@ -108,10 +108,10 @@ int	increase(int *map, double *side_dist, double delta_dist, double ray_dir)
 	*side_dist += delta_dist;
 	if (ray_dir > 0)
 	{
-		map++;
+		(*map)++;
 		return (0);
 	}
-	map--;
+	(*map)--;
 	return (1);
 }
 
