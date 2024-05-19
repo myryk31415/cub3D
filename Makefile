@@ -30,15 +30,17 @@ endif
 SRC_PATH = src
 OBJ_PATH = obj
 
-OBJ_DIRS =	parsing	raycasting main
+OBJ_DIRS =	parsing	raycasting main sprites
 
 SRCS_MAIN =	main.c cleanup.c
 SRCS_PARSING = parse_file.c parse_utils.c
 SRCS_RAY = raycast.c
+SRCS_SPRITE = sprites.c
 
 SRC_NAME =	$(addprefix main/,						$(SRCS_MAIN))		\
 			$(addprefix parsing/,					$(SRCS_PARSING))	\
-			$(addprefix raycasting/,				$(SRCS_RAY))
+			$(addprefix raycasting/,				$(SRCS_RAY))		\
+			$(addprefix sprites/,					$(SRCS_SPRITE))
 
 RED = \033[1;31m
 GREEN = \033[1;32m

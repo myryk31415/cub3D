@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 01:48:37 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 15:02:15 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	initialize(t_game *game)
 	game->turn_speed = TURN_SPEED;
 	game->wall_height = WALL_HEIGHT;
 	game->fov_factor = 1;
+	game->num_sprites = 1;
 	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
 	mlx_set_cursor_mode(game->mlx, MLX_MOUSE_DISABLED);
 	game->image = mlx_new_image(game->mlx, 1000, 800);
@@ -153,6 +154,7 @@ void	loop_hook(void *in)
 		mlx_image_to_window(game->mlx, game->image, 0, 0);
 	}
 	raycast(in);
+	sprites(game);
 }
 
 /*

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 22:41:14 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 14:18:17 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,11 @@ t_map	parse_map(char **file, int i, t_game *game)
 				if (file[i][k] == 'W')
 					game->dir.x = -1;
 			}
+			else if (file[i][k] == 'B')
+			{
+				game->sprites[0].pos.x = k;
+				game->sprites[0].pos.y = i;
+			}
 			else
 				error("Wrong charakter in map\n", game, file, NULL);
 		}
@@ -187,7 +192,10 @@ int	parse_file(t_game *game, char **file)
 	int	i;
 
 	i = -1;
-	game->textures = ft_calloc(sizeof(t_map), 5);
+	game->textures = ft_calloc(sizeof(t_map), 6);
+	game->sprites = ft_calloc(sizeof(t_sprite), game->num_sprites);
+	// if (!game->sprites)
+	// 	error_sprite();
 	while (file[++i])
 	{
 		if (file[i][0] == 'N' && file[i][1] == 'O')
@@ -202,6 +210,8 @@ int	parse_file(t_game *game, char **file)
 			game->floor = get_color(file[i], 0, game, file);
 		else if (file[i][0] == 'C')
 			game->ceiling = get_color(file[i], 0, game, file);
+		else if (file[i][0] == 'P')
+			game->textures[4] = get_texture(file[i], -1, game, file);
 		else if (check_if_map(file[i]))
 		{
 			game->map = parse_map(file, i, game);

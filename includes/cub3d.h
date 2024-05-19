@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 02:02:02 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 15:01:23 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ typedef struct s_map
 	t_pixel	**grid;
 }	t_map;
 
+typedef struct s_sprite
+{
+	t_vec2d	pos;
+	int		texture;
+}	t_sprite;
+
 typedef struct s_int2d
 {
 	int	x;
@@ -74,10 +80,22 @@ typedef struct s_game
 	float		turn_speed;
 	t_vec2d		camera_plane;
 	int			fov_factor;
+	double		*ZBuffer;
+	int			num_sprites;
+	t_sprite	*sprites;
+	t_vec2d		transformed;
+	int			start_y;
+	int			end_y;
+	int			start_x;
+	int			end_x;
 	int			init;
+	int			sprite_width;
+	int			sprite_height;
+	int			sprite_x_screen;
 }	t_game;
 
 int		raycast(t_game *game);
+int		sprites(t_game *game);
 
 // Parsing Utils
 int		check_if_map(char *str);
@@ -97,4 +115,5 @@ t_map	get_texture(char *str, int i, t_game *game, char **file);
 void	free_str_array(void **arr, int *n);
 void	free_arrays(t_game *game, t_map *map);
 void	error(char *msg, t_game *game, char **file, t_map *map);
+void	error_sprite(void);
 #endif

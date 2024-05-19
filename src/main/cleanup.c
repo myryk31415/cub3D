@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 10:39:56 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/18 19:11:32 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/19 11:53:22 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,9 @@ void	error(char *msg, t_game *game, char **file, t_map *map)
 	free_arrays(game, map);
 	free_str_array((void *)file, NULL);
 	exit (1);
+}
+
+void	error_sprite(void)
+{
+	
 }
