@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 15:01:23 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/19 15:26:03 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 #  define WALL_HEIGHT 0.5
 # endif
 
+# define START_HEIGHT 800
+# define START_WIDTH 1000
 typedef union u_pixel
 {
 	uint32_t	value;
@@ -80,7 +82,7 @@ typedef struct s_game
 	float		turn_speed;
 	t_vec2d		camera_plane;
 	int			fov_factor;
-	double		*ZBuffer;
+	double		*depth;
 	int			num_sprites;
 	t_sprite	*sprites;
 	t_vec2d		transformed;

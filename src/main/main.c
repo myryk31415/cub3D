@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 15:02:15 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/19 15:27:11 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,16 @@ void	initialize(t_game *game)
 	game->wall_height = WALL_HEIGHT;
 	game->fov_factor = 1;
 	game->num_sprites = 1;
-	game->mlx = mlx_init(1000, 800, "Cub3D", 1);
+	game->mlx = mlx_init(START_WIDTH, START_HEIGHT, "Cub3D", 1);
 	mlx_set_cursor_mode(game->mlx, MLX_MOUSE_DISABLED);
-	game->image = mlx_new_image(game->mlx, 1000, 800);
+	game->image = mlx_new_image(game->mlx, START_WIDTH, START_HEIGHT);
 	mlx_image_to_window(game->mlx, game->image, 0, 0);
 	int x;
 	int y;
 	mlx_set_mouse_pos(game->mlx, game->mlx->width / 2, game->mlx->height / 2);
 	mlx_get_mouse_pos(game->mlx, &x, &y);
 	game->init = 5;
+	game->depth = ft_calloc(START_WIDTH, sizeof(double));
 }
 
 void	printmap(t_game *game)
@@ -152,6 +153,8 @@ void	loop_hook(void *in)
 		mlx_delete_image(game->mlx, game->image);
 		game->image = mlx_new_image(game->mlx, game->mlx->width, game->mlx->height);
 		mlx_image_to_window(game->mlx, game->image, 0, 0);
+		free(game->depth);
+		game->depth = ft_calloc(game->mlx->width, sizeof(double));
 	}
 	raycast(in);
 	sprites(game);

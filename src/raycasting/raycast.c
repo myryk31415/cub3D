@@ -99,6 +99,7 @@ int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d side_dist, t_vec2d 
 		wall_x = game->pos.x + cos(angle2) * (side_dist.y - delta_dist.y);
 	}
 	wall_x -= floor(wall_x);
+	game->depth[x] = wall_dist;
 	return (draw_line(x, side, wall_dist, wall_x, ray_dir, game));
 }
 
