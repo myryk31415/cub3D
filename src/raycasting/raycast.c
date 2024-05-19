@@ -103,40 +103,31 @@ int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d side_dist, t_vec2d 
 	return (draw_line(x, side, wall_dist, wall_x, ray_dir, game));
 }
 
-int	cast_loop(t_int2d map, t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *game)
+int	increase(int *map, double *side_dist, double delta_dist, double ray_dir)
+{
+	*side_dist += delta_dist;
+	if (ray_dir > 0)
+	{
+		map++;
+		return (0);
+	}
+	map--;
+	return (1);
+}
+
+int	cast_loop(t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *game)
 {
 	int		side;
+	t_int2d	map;
 
+	map.x = (int)game->pos.x;
+	map.y = (int)game->pos.y;
 	while (1)
 	{
 		if (side_dist->x < side_dist->y)
-		{
-			side_dist->x += delta_dist.x;
-			if (ray_dir.x > 0)
-			{
-				map.x++;
-				side = 0;
-			}
-			else
-			{
-				map.x--;
-				side = 1;
-			}
-		}
+			side = increase(&map.x, &side_dist->x, delta_dist.x, ray_dir.x);
 		else
-		{
-			side_dist->y += delta_dist.y;
-			if (ray_dir.y > 0)
-			{
-				map.y++;
-				side = 2;
-			}
-			else
-			{
-				map.y--;
-				side = 3;
-			}
-		}
+			side = 2 + increase(&map.y, &side_dist->y, delta_dist.y, ray_dir.y);
 		if (map.x < 0 && ray_dir.x <= 0)
 			return (-1);
 		if (map.x >= game->map.width && ray_dir.x >= 0)
@@ -181,7 +172,7 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 		side_dist.y = (map.y + 1.0 - game->pos.y) * delta_dist.y;
 	// assign(&side_dist.x, ray_dir.x, delta_dist.x, game->pos.x - map.x);
 	// assign(&side_dist.y, ray_dir.y, delta_dist.y, game->pos.y - map.y);
-	side = cast_loop(map, ray_dir, delta_dist, &side_dist, game);
+	side = cast_loop(ray_dir, delta_dist, &side_dist, game);
 	if (side == -1)
 	{
 		empty_line(game, x);
