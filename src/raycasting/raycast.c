@@ -86,13 +86,13 @@ int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d difference, t_game 
 
 	if (side < 2)
 	{
-		wall_dist = cos(angle) * (side_dist.x - delta_dist.x);
-		wall_x = game->pos.y + sin(angle2) * (side_dist.x - delta_dist.x) * (1 - 2 * (ray_dir.y < 0)); //here problems
+		wall_dist = cos(angle) * difference.x;
+		wall_x = game->pos.y + sin(angle2) * difference.x * (1 - 2 * (ray_dir.y < 0)); //here problems
 	}
 	else
 	{
-		wall_dist = cos(angle) * (side_dist.y - delta_dist.y);
-		wall_x = game->pos.x + cos(angle2) * (side_dist.y - delta_dist.y);
+		wall_dist = cos(angle) * difference.y;
+		wall_x = game->pos.x + cos(angle2) * difference.y;
 	}
 	wall_x -= floor(wall_x);
 	game->depth[x] = wall_dist;
@@ -174,7 +174,7 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 		empty_line(game, x);
 		return (0);
 	}
-	return (calc_wall_dist(x, side, ray_dir, side_dist, delta_dist, game));
+	return (calc_wall_dist(x, side, ray_dir, vec2d_sub(side_dist, delta_dist), game));
 }
 
 /*
