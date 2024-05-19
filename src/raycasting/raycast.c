@@ -33,10 +33,6 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_game *game)
 		draw_end = game->mlx->height - 1;
 	step = 1.0 * game->textures[side].height / line_height;
 	texPos.x = wall_x * (double)game->textures[side].width;
-	// if (side == 0)
-	// 	texPos.x = game->textures[side].width - texPos.x;
-	// if (side > 2 && ray_dir.x > 0)
-	// 	texPos.x = game->textures[side].width - texPos.x;
 	texPos.y = (draw_start - game->mlx->height / 2 + line_height / 2) * step;
 	i = 0;
 	while (i < draw_start)
@@ -81,7 +77,7 @@ void	empty_line(t_game *game, int x)
 	}
 }
 
-int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d side_dist, t_vec2d delta_dist, t_game *game)
+int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d difference, t_game *game)
 {
 	double	wall_dist;
 	double	wall_x;
