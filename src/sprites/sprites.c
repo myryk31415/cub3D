@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 11:15:28 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/19 14:58:04 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/19 15:25:28 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,24 +67,29 @@ void	calculate_sprite(t_game *game, int *sprite_order, int i)
 		sprite_pos.y * game->dir.x);
 	game->transformed.y = transform * (sprite_pos.x * -game->camera_plane.y \
 		+ sprite_pos.y * game->camera_plane.x);
-	// vec2d_rot(sprite_pos, 1.5708);
 	// game->transformed = vec2d_sub(game->sprites[sprite_order[i]].pos, game->pos);
 	// vec2d_rot(game->transformed, 1.5708);
-	game->sprite_x_screen = (int)((game->mlx->width / 2) * (1 + game->transformed.x/game->transformed.y));
+	game->sprite_x_screen = (int)((game->mlx->width / 2.) * (1. + game->transformed.x/game->transformed.y));
 	game->sprite_height = fabs((int)game->mlx->height / game->transformed.y);
-	game->sprite_width = fabs((int)game->mlx->height / game->transformed.y);
+	game->sprite_width = fabs((int)game->mlx->width / game->transformed.x);
 	game->start_y = -game->sprite_height / 2 + game->mlx->height / 2;
 	if (game->start_y < 0)
 		game->start_y = 0;
 	game->end_y = game->sprite_height / 2 + game->mlx->height / 2;
 	if (game->end_y >= game->mlx->height)
 		game->end_y = game->mlx->height - 1;
-	game->start_x= -game->sprite_width / 2 + game->sprite_x_screen;
+	game->start_x= -game->sprite_width / 2 + game->transformed.y;
 	if (game->start_x < 0)
 		game->start_x = 0;
-	game->end_x = game->sprite_width / 2 + game->sprite_x_screen;
+	game->end_x = game->sprite_width / 2 + game->transformed.y;
 	if (game->end_x >= game->mlx->width)
 		game->end_x = game->mlx->width - 1;
+	// game->start_x= -game->sprite_width / 2 + game->sprite_x_screen;
+	// if (game->start_x < 0)
+	// 	game->start_x = 0;
+	// game->end_x = game->sprite_width / 2 + game->sprite_x_screen;
+	// if (game->end_x >= game->mlx->width)
+	// 	game->end_x = game->mlx->width - 1;
 }
 
 void	draw_sprite(t_game *game, int *sprite_order, int i)
@@ -96,12 +101,12 @@ void	draw_sprite(t_game *game, int *sprite_order, int i)
 	uint32_t	color;
 	
 	j = game->start_x;
-	while (j < game->end_x)
+	while (j < game->mlx->width && j < game->end_x)
 	{
-		tex_x = ((j - (-game->sprite_width / 2 + game->sprite_x_screen)) * game->textures[game->sprites[sprite_order[i]].texture].width / game->sprite_width);
+		tex_x = ((j - game->start_x) * game->textures[game->sprites[sprite_order[i]].texture].width / game->sprite_width);
 		k = game->start_y;
 		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width)
-			while (k < game->end_y)
+			while (k < game->mlx->height && k < game->end_y)
 			{
 				tex_y = ((k - game->start_y) * game->textures[game->sprites[sprite_order[i]].texture].height) / game->sprite_height;
 				color = game->textures[game->sprites[sprite_order[i]].texture].grid[tex_x][tex_y].value;
