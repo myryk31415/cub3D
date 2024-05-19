@@ -60,7 +60,7 @@ int	draw_line(int x, int side, double wall_dist, double wall_x, t_vec2d ray_dir,
 }
 
 /*
- *@brief Draws a vertical black line.
+ *@brief Draws a vertical line, top half is ceiling color, bottom half floor color.
  *@param game The game structure.
  *@param x The screen x coordinate.
 */
@@ -87,6 +87,7 @@ int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d side_dist, t_vec2d 
 	double	wall_x;
 	double angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
 	double angle2 = fabs(vec2d_getrot(ray_dir));
+
 	if (side < 2)
 	{
 		wall_dist = cos(angle) * (side_dist.x - delta_dist.x);
@@ -101,80 +102,90 @@ int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d side_dist, t_vec2d 
 	return (draw_line(x, side, wall_dist, wall_x, ray_dir, game));
 }
 
-int	cast_loop(int map_x, int map_y, int x, t_vec2d step, t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *game)
+int	cast_loop(t_int2d map, t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *game)
 {
 	int		side;
-	int		hit;
 
-	hit = 0;
-	while (!hit)
+	while (1)
 	{
 		if (side_dist->x < side_dist->y)
 		{
 			side_dist->x += delta_dist.x;
-			map_x += step.x;
-			side = 0;
-			if (ray_dir.x < 0)
+			if (ray_dir.x > 0)
+			{
+				map.x++;
+				side = 0;
+			}
+			else
+			{
+				map.x--;
 				side = 1;
+			}
 		}
 		else
 		{
 			side_dist->y += delta_dist.y;
-			map_y += step.y;
-			side = 2;
-			if (ray_dir.y < 0)
+			if (ray_dir.y > 0)
+			{
+				map.y++;
+				side = 2;
+			}
+			else
+			{
+				map.y--;
 				side = 3;
+			}
 		}
-		if (map_x < 0 && ray_dir.x <= 0)
-			return (empty_line(game, x), -1);
-		if (map_x >= game->map.width && ray_dir.x >= 0)
-			return (empty_line(game, x), -1);
-		if (map_y < 0 && ray_dir.y <= 0)
-			return (empty_line(game, x), -1);
-		if (map_y >= game->map.height && ray_dir.y >= 0)
-			return (empty_line(game, x), -1);
-		if (map_y >= 0 && map_y < game->map.height && map_x >= 0 && map_x < game->map.width && game->map.grid[map_y][map_x].value == 1)
-			hit = 1;
+		if (map.x < 0 && ray_dir.x <= 0)
+			return (-1);
+		if (map.x >= game->map.width && ray_dir.x >= 0)
+			return (-1);
+		if (map.y < 0 && ray_dir.y <= 0)
+			return (-1);
+		if (map.y >= game->map.height && ray_dir.y >= 0)
+			return (-1);
+		if (map.y >= 0 && map.y < game->map.height && map.x >= 0 &&
+			map.x < game->map.width && game->map.grid[map.y][map.x].value == 1)
+			return (side);
 	}
-	return (side);
+	return (0);
 }
+
+// void	assign(double *side_dist, double ray_dir, double delta_dist, double pos)
+// {
+// 	if (ray_dir < 0)
+// 		*side_dist = pos * delta_dist;
+// 	else
+// 		*side_dist = (-pos + 1.0) * delta_dist;
+// }
 
 int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 {
-	int		map_x;
-	int		map_y;
+	t_int2d map;
 	t_vec2d	delta_dist;
 	t_vec2d	side_dist;
-	t_vec2d	step;
 	int		side;
 
-	map_x = (int)game->pos.x;
-	map_y = (int)game->pos.y;
+	map.x = (int)game->pos.x;
+	map.y = (int)game->pos.y;
 	delta_dist.x = fabs(vec2d_len(ray_dir) / ray_dir.x);
 	delta_dist.y = fabs(vec2d_len(ray_dir) / ray_dir.y);
 	if (ray_dir.x < 0)
-	{
-		step.x = -1;
-		side_dist.x = (game->pos.x - map_x) * delta_dist.x;
-	}
+		side_dist.x = (game->pos.x - map.x) * delta_dist.x;
 	else
-	{
-		step.x = 1;
-		side_dist.x = (map_x + 1.0 - game->pos.x) * delta_dist.x;
-	}
+		side_dist.x = (map.x + 1.0 - game->pos.x) * delta_dist.x;
 	if (ray_dir.y < 0)
-	{
-		step.y = -1;
-		side_dist.y = (game->pos.y - map_y) * delta_dist.y;
-	}
+		side_dist.y = (game->pos.y - map.y) * delta_dist.y;
 	else
-	{
-		step.y = 1;
-		side_dist.y = (map_y + 1.0 - game->pos.y) * delta_dist.y;
-	}
-	side = cast_loop(map_x, map_y, x, step, ray_dir, delta_dist, &side_dist, game);
+		side_dist.y = (map.y + 1.0 - game->pos.y) * delta_dist.y;
+	// assign(&side_dist.x, ray_dir.x, delta_dist.x, game->pos.x - map.x);
+	// assign(&side_dist.y, ray_dir.y, delta_dist.y, game->pos.y - map.y);
+	side = cast_loop(map, ray_dir, delta_dist, &side_dist, game);
 	if (side == -1)
+	{
+		empty_line(game, x);
 		return (0);
+	}
 	return (calc_wall_dist(x, side, ray_dir, side_dist, delta_dist, game));
 }
 

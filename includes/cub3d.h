@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 01:31:47 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 02:02:02 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ typedef struct s_map
 	int		height;
 	t_pixel	**grid;
 }	t_map;
+
+typedef struct s_int2d
+{
+	int	x;
+	int	y;
+}	t_int2d;
 
 typedef struct s_game
 {
