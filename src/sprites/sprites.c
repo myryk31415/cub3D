@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 11:15:28 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/19 15:25:28 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/19 15:30:39 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	draw_sprite(t_game *game, int *sprite_order, int i)
 	{
 		tex_x = ((j - game->start_x) * game->textures[game->sprites[sprite_order[i]].texture].width / game->sprite_width);
 		k = game->start_y;
-		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width)
+		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width && game->transformed.y < game->depth[j])
 			while (k < game->mlx->height && k < game->end_y)
 			{
 				tex_y = ((k - game->start_y) * game->textures[game->sprites[sprite_order[i]].texture].height) / game->sprite_height;
