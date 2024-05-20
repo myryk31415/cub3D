@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/20 15:04:26 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/20 15:09:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void	loop_hook(void *in)
 		game->depth = ft_calloc(game->mlx->width, sizeof(double));
 	}
 	raycast(in);
-	//sprites(game);
+	sprites(game);
 }
 
 /*

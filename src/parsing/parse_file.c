@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 10:01:58 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 15:12:08 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ t_map	get_texture(char *str, int i, t_game *game, char **file)
 		j++;
 	texture_path = ft_substr(str, i, j - i);
 	if (str[i - 1] == '.')
-		texture_path = ft_strjoin_free(ft_strjoin_free(get_env("PWD"), \
-			ft_strdup("/textures")), texture_path);
+		texture_path = ft_strjoin_free(get_env("PWD"), texture_path);
 	if (fill_map(&map, texture_path, -1) == -1)
 	{
 		free(texture_path);
