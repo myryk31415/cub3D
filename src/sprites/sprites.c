@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 11:15:28 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 20:36:58 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 20:43:41 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	sort_sprites(int num_sprites, double *sprite_dist, int *sprite_order)
 	i = 0;
 	if (num_sprites == 1)
 		return ;
-	while (i < num_sprites)
+	while (i < num_sprites - 1)
 	{
-		if (sprite_dist[sprite_order[i + 1]] && sprite_dist[sprite_order[i]] < sprite_dist[sprite_order[i + 1]])
+		if (sprite_dist[sprite_order[i]] < sprite_dist[sprite_order[i + 1]])
 		{
 			tmp_int = sprite_order[i];
 			sprite_order[i] = sprite_order[i + 1];
