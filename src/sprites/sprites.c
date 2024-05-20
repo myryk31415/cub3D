@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 11:15:28 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 14:54:40 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 16:56:08 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	calculate_sprite(t_game *game, int *sprite_order, int i)
 	game->x_screen = (int)(game->mlx->width / 2) * (1. + game->transformed.x / game->transformed.y);
 	game->sprite_height = fabs((int)game->mlx->height / game->transformed.y);
 	game->sprite_width = fabs((int)game->mlx->height / game->transformed.y);
-	printf("transformed y: %f\n", game->transformed.y);
 	game->start_y = -game->sprite_height / 2 + game->mlx->height / 2;
 	if (game->start_y < 0)
 		game->start_y = 0;
@@ -100,7 +99,7 @@ void	draw_sprite(t_game *game, int *sprite_order, t_map texture)
 		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width && game->transformed.y < game->depth[j])
 		{
 			k = game->start_y;
-			while (k < game->end_y)
+			while (k >= 0.1 && k < game->end_y)
 			{
 				tex_y = ((int)(k * 256. - game->mlx->height *128. + game->sprite_height *128.) * texture.height) / game->sprite_height /256;
 				if (tex_x < texture.width && tex_y < texture.height && \
@@ -123,11 +122,8 @@ int	sprites(t_game *game)
 	i = 0;
 	while (i < game->num_sprites)
 	{
-		if (sprite_dist[i] > .1)
-		{
-			calculate_sprite(game, sprite_order, i);
-			draw_sprite(game, sprite_order, game->textures[game->sprites[sprite_order[i]].texture]);
-		}
+		calculate_sprite(game, sprite_order, i);
+		draw_sprite(game, sprite_order, game->textures[game->sprites[sprite_order[i]].texture]);
 		i++;
 	}
 	return (0);

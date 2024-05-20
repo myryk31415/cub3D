@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 15:13:14 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/20 16:33:40 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
