@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 15:27:11 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/19 20:55:39 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	parser(&game, argv[1]);
-	printmap(&game);
+	// printmap(&game);
 	initialize(&game);
 	// init_test(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);

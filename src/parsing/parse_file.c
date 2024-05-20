@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/19 14:18:17 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 10:01:58 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,11 @@ t_map	parse_map(char **file, int i, t_game *game)
 		k = -1;
 		while (++k < map.width)
 		{
-			if (file[i][k] == ' ' || !file[i][k])
+			if (file[i][k] == ' ') 
 				map.grid[j][k].value = 2;
+			else if (!file[i][k])
+				while (k < map.width)
+					map.grid[j][k++].value = 2;
 			else if (file[i][k] == '0')
 				map.grid[j][k].value = 0;
 			else if (file[i][k] == '1')
@@ -167,7 +170,7 @@ t_map	parse_map(char **file, int i, t_game *game)
 			else if (file[i][k] == 'B')
 			{
 				game->sprites[0].pos.x = k;
-				game->sprites[0].pos.y = i;
+				game->sprites[0].pos.y = j;
 			}
 			else
 				error("Wrong charakter in map\n", game, file, NULL);
