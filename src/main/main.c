@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/19 17:13:12 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/20 15:04:26 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	parser(&game, argv[1]);
-	printmap(&game);
+	// printmap(&game);
 	initialize(&game);
 	// init_test(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);

@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 11:15:28 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/19 14:58:04 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 11:44:57 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,31 +60,31 @@ void	calculate_sprite(t_game *game, int *sprite_order, int i)
 	t_vec2d	sprite_pos;
 	double	transform;
 
-	sprite_pos = vec2d_sub(game->sprites[sprite_order[i]].pos, game->pos);
 	transform = 1.0 / (game->camera_plane.x * game->dir.y - \
-		game->pos.x * game->camera_plane.y);
+		game->dir.x * game->camera_plane.y);
+	sprite_pos = vec2d_sub(game->sprites[sprite_order[i]].pos, game->pos);
 	game->transformed.x = transform * (sprite_pos.x * game->dir.y - \
 		sprite_pos.y * game->dir.x);
-	game->transformed.y = transform * (sprite_pos.x * -game->camera_plane.y \
-		+ sprite_pos.y * game->camera_plane.x);
-	// vec2d_rot(sprite_pos, 1.5708);
+	game->transformed.y = transform * (-game->camera_plane.y * sprite_pos.x + sprite_pos.y * game->camera_plane.x);
 	// game->transformed = vec2d_sub(game->sprites[sprite_order[i]].pos, game->pos);
-	// vec2d_rot(game->transformed, 1.5708);
-	game->sprite_x_screen = (int)((game->mlx->width / 2) * (1 + game->transformed.x/game->transformed.y));
+	// vec2d_rot(game->transformed, M_PI / 2);
+	game->sprite_x_screen = (int)(game->mlx->width / 2) * (1. + game->transformed.x / game->transformed.y);
 	game->sprite_height = fabs((int)game->mlx->height / game->transformed.y);
 	game->sprite_width = fabs((int)game->mlx->height / game->transformed.y);
+	printf("transformed y: %f\n", game->transformed.y);
 	game->start_y = -game->sprite_height / 2 + game->mlx->height / 2;
 	if (game->start_y < 0)
 		game->start_y = 0;
 	game->end_y = game->sprite_height / 2 + game->mlx->height / 2;
 	if (game->end_y >= game->mlx->height)
 		game->end_y = game->mlx->height - 1;
-	game->start_x= -game->sprite_width / 2 + game->sprite_x_screen;
+	game->start_x = -game->sprite_width / 2 + game->sprite_x_screen;
 	if (game->start_x < 0)
 		game->start_x = 0;
 	game->end_x = game->sprite_width / 2 + game->sprite_x_screen;
 	if (game->end_x >= game->mlx->width)
 		game->end_x = game->mlx->width - 1;
+	// printf("start pos x: %d pos y: %d\n", game->start_x, game->start_y);
 }
 
 void	draw_sprite(t_game *game, int *sprite_order, int i)
@@ -94,21 +94,31 @@ void	draw_sprite(t_game *game, int *sprite_order, int i)
 	int			tex_x;
 	int			tex_y;
 	uint32_t	color;
+	int			tmp;
 	
 	j = game->start_x;
 	while (j < game->end_x)
 	{
-		tex_x = ((j - (-game->sprite_width / 2 + game->sprite_x_screen)) * game->textures[game->sprites[sprite_order[i]].texture].width / game->sprite_width);
-		k = game->start_y;
-		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width)
+			color = 255;
+		tex_x = (int)(256 * (((int)(j) - (-game->sprite_width / 2. + game->sprite_x_screen)))
+			* game->textures[game->sprites[sprite_order[i]].texture].width / game->sprite_width) / 256;
+		// tex_x = ((j - game->start_x) * game->textures[game->sprites[sprite_order[i]].texture].width / game->sprite_width);
+		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width && game->transformed.y < game->depth[j])
+		{
+			k = game->start_y;
 			while (k < game->end_y)
 			{
-				tex_y = ((k - game->start_y) * game->textures[game->sprites[sprite_order[i]].texture].height) / game->sprite_height;
-				color = game->textures[game->sprites[sprite_order[i]].texture].grid[tex_x][tex_y].value;
-				if (color != 255)
+				tmp = ((int)(k) * 256.) - (game->mlx->height * 128.)
+							+ (game->sprite_height * 128.);
+				tex_y = ((tmp * game->textures[game->sprites[sprite_order[i]].texture].height) / game->sprite_height) / 256.;
+				// tex_y = ((k - game->mlx->height + game->sprite_height) * game->textures[game->sprites[sprite_order[i]].texture].height) / game->sprite_height;
+				if (tex_x < game->textures[game->sprites[sprite_order[i]].texture].width && tex_y < game->textures[game->sprites[sprite_order[i]].texture].height)
+					color = game->textures[game->sprites[sprite_order[i]].texture].grid[tex_x][tex_y].value;
+				// if (color != 255)
 					mlx_put_pixel(game->image, k, j, color);
 				k++;
 			}
+		}
 		j++;
 	}
 }
