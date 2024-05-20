@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 11:15:28 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 16:56:08 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 19:11:52 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,19 @@ void	draw_sprite(t_game *game, int *sprite_order, t_map texture)
 	int			k;
 	int			tex_x;
 	int			tex_y;
-	
+
 	j = game->start_x;
 	while (j < game->end_x)
 	{
-		tex_x = (int)(256 * (((j) - (-game->sprite_width / 2. + game->x_screen)))
-			* texture.width / game->sprite_width) / 256;
+		tex_x = (int)((((j) - (-game->sprite_width / 2. + game->x_screen)))
+			* texture.width / game->sprite_width);
 		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width && game->transformed.y < game->depth[j])
 		{
 			k = game->start_y;
-			while (k >= 0.1 && k < game->end_y)
+			while (k >= 0 && k < game->end_y)
 			{
-				tex_y = ((int)(k * 256. - game->mlx->height *128. + game->sprite_height *128.) * texture.height) / game->sprite_height /256;
-				if (tex_x < texture.width && tex_y < texture.height && \
+				tex_y = ((int)(k * 256. - game->mlx->height * 128. + game->sprite_height * 128.) * texture.height) / game->sprite_height / 256;
+				if (tex_x >= 0 && tex_y >= 0 && tex_x < texture.width && tex_y < texture.height && \
 					texture.grid[tex_y][tex_x].value != 255)
 					mlx_put_pixel(game->image, j, k, texture.grid[tex_y][tex_x].value);
 				k++;
@@ -114,16 +114,19 @@ void	draw_sprite(t_game *game, int *sprite_order, t_map texture)
 
 int	sprites(t_game *game)
 {
-	int		sprite_order[game->num_sprites];
-	double	sprite_dist[game->num_sprites];
+	int		*sprite_order;
+	double	*sprite_dist;
 	int		i;
 
+	sprite_order = ft_calloc(sizeof(int), game->num_sprites);
+	sprite_dist = ft_calloc(sizeof(double), game->num_sprites);
 	init_sprites(game, sprite_dist, sprite_order);
 	i = 0;
 	while (i < game->num_sprites)
 	{
 		calculate_sprite(game, sprite_order, i);
-		draw_sprite(game, sprite_order, game->textures[game->sprites[sprite_order[i]].texture]);
+		draw_sprite(game, sprite_order, \
+		game->textures[game->sprites[sprite_order[i]].texture]);
 		i++;
 	}
 	return (0);
