@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 17:05:10 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 23:07:46 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ t_map	parse_map(char **file, int i, t_game *game)
 				game->sprites[sprite_count].pos.x = k + 0.5;
 				game->sprites[sprite_count].pos.y = j + 0.5;
 				sprite_count++;
+				map.grid[j][k].value = 3;
 			}
 			else
 				error("Wrong charakter in map\n", game, file);
