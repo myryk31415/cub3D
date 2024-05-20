@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 15:12:08 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/20 15:13:14 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,16 +115,41 @@ int	get_max_width(char **file, int i)
 	return (max_width);
 }
 
+void	init_sprites(char **file, t_game *game)
+{
+	int	i;
+	int	j;
+	int	num_sprites;
+
+	i = 0;
+	num_sprites = 0;
+	while (file[i])
+	{
+		j = 0;
+		while (file[i][j])
+		{
+			if (file[i][j] == 'B')
+				num_sprites++;
+			j++;
+		}
+		i++;
+	}
+	game->sprites = ft_calloc(sizeof(t_sprite), num_sprites);
+	game->num_sprites = num_sprites;
+}
+
 t_map	parse_map(char **file, int i, t_game *game)
 {
 	t_map	map;
 	int		j;
 	int		k;
 	int		start_pos;
+	int		sprite_count;
 
+	sprite_count = 0;
 	start_pos = 0;
-
 	map.width = get_max_width(file, i);
+	init_sprites(file, game);
 	j = i;
 	k = -1;
 	while (file[j])
@@ -168,8 +193,9 @@ t_map	parse_map(char **file, int i, t_game *game)
 			}
 			else if (file[i][k] == 'B')
 			{
-				game->sprites[0].pos.x = k;
-				game->sprites[0].pos.y = j;
+				game->sprites[sprite_count].pos.x = k + 0.5;
+				game->sprites[sprite_count].pos.y = j + 0.5;
+				sprite_count++;
 			}
 			else
 				error("Wrong charakter in map\n", game, file, NULL);
@@ -195,7 +221,6 @@ int	parse_file(t_game *game, char **file)
 
 	i = -1;
 	game->textures = ft_calloc(sizeof(t_map), 6);
-	game->sprites = ft_calloc(sizeof(t_sprite), game->num_sprites);
 	// if (!game->sprites)
 	// 	error_sprite();
 	while (file[++i])
