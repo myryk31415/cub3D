@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/20 14:47:31 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 17:04:30 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ t_map	get_texture(char *str, int i, t_game *game, char **file);
 
 // Cleanup
 void	free_str_array(void **arr, int *n);
-void	free_arrays(t_game *game, t_map *map);
-void	error(char *msg, t_game *game, char **file, t_map *map);
+void	error(char *msg, t_game *game, char **file);
 void	error_sprite(void);
 #endif

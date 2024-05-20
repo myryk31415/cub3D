@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:02:43 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 16:33:40 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/20 17:05:10 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_map	get_texture(char *str, int i, t_game *game, char **file)
 		if (str[i] == '/')
 			break;
 	if (!str[i])
-		error("Wrong Texture Path", game, file, NULL);
+		error("Wrong Texture Path", game, file);
 	j = i;
 	while (str[j] && str[j] != ' ' && str[j] != '\n')
 		j++;
@@ -64,7 +64,7 @@ t_map	get_texture(char *str, int i, t_game *game, char **file)
 	if (fill_map(&map, texture_path, -1) == -1)
 	{
 		free(texture_path);
-		error(NULL, game, file, NULL);
+		error(NULL, game, file);
 	}
 	free(texture_path);
 	return (map);
@@ -97,7 +97,7 @@ t_pixel	get_color(char *str, int count, t_game *game, char **file)
 			i = j;
 		}
 	if (count < 3)
-		error("RGB Colors missing\n", game, file, NULL);
+		error("RGB Colors missing\n", game, file);
 	return (color);
 }
 
@@ -156,13 +156,13 @@ t_map	parse_map(char **file, int i, t_game *game)
 		j++;
 	map.grid = ft_calloc(sizeof(t_pixel *), j + 1);
 	if (!map.grid)
-		error("Allocation Failure", game, file, NULL);
+		error("Allocation Failure", game, file);
 	j = 0;
 	while (file[i] && file[i][0] != '\0')
 	{
 		map.grid[j] = ft_calloc(sizeof(t_pixel), map.width);
 		if (!map.grid[j])
-			error("Allocation Failure", game, file, NULL);
+			error("Allocation Failure", game, file);
 		k = -1;
 		while (++k < map.width)
 		{
@@ -198,7 +198,7 @@ t_map	parse_map(char **file, int i, t_game *game)
 				sprite_count++;
 			}
 			else
-				error("Wrong charakter in map\n", game, file, NULL);
+				error("Wrong charakter in map\n", game, file);
 		}
 		if (file[i][0] == '\0')
 				break;
@@ -207,11 +207,11 @@ t_map	parse_map(char **file, int i, t_game *game)
 	}
 	map.height = j;
 	if (!start_pos)
-		error("No Players\n", game, file, NULL);
+		error("No Players\n", game, file);
 	if (start_pos > 1)
-		error("Too many Players\n", game, file, NULL);
+		error("Too many Players\n", game, file);
  	if (check_valid_map(&map))
-		error("Map walls not closed\n", game, file, NULL);
+		error("Map walls not closed\n", game, file);
 	return (map);
 }
 
