@@ -12,19 +12,14 @@
 
 #include "cub3d.h"
 
-int	draw_line(int x, int side, double wall_dist, double wall_x, t_game *game)
+int	draw_line(int x, int side, int line_height, double wall_x, t_game *game)
 {
-	int		line_height;
 	int		draw_start;
 	int		draw_end;
 	int		i;
 	double	step;
 	t_vec2d texPos;
 
-	if (wall_dist > 0)
-		line_height = (int)(game->mlx->width * game->wall_height / wall_dist);
-	else
-		line_height = game->mlx->height;
 	draw_start = -line_height / 2 + game->mlx->height / 2;
 	if (draw_start < 0)
 		draw_start = 0;
@@ -79,24 +74,27 @@ void	empty_line(t_game *game, int x)
 
 int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d difference, t_game *game)
 {
-	double	wall_dist;
 	double	wall_x;
-	double angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
-	double angle2 = fabs(vec2d_getrot(ray_dir));
+	double	angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
+	double	angle2 = fabs(vec2d_getrot(ray_dir));
+	int		line_height;
 
 	if (side < 2)
 	{
-		wall_dist = cos(angle) * difference.x;
+		game->depth[x] = cos(angle) * difference.x;
 		wall_x = game->pos.y + sin(angle2) * difference.x * (1 - 2 * (ray_dir.y < 0)); //here problems
 	}
 	else
 	{
-		wall_dist = cos(angle) * difference.y;
+		game->depth[x] = cos(angle) * difference.y;
 		wall_x = game->pos.x + cos(angle2) * difference.y;
 	}
 	wall_x -= floor(wall_x);
-	game->depth[x] = wall_dist;
-	return (draw_line(x, side, wall_dist, wall_x, game));
+	if (game->depth[x] > 0)
+		line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
+	else
+		line_height = game->mlx->height;
+	return (draw_line(x, side, line_height, wall_x, game));
 }
 
 int	increase(int *map, double *side_dist, double delta_dist, double ray_dir)
