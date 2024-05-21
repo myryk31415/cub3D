@@ -12,14 +12,37 @@
 
 #include "cub3d.h"
 
-int	draw_line(int x, int side, int line_height, double wall_x, t_game *game)
+void	draw_wall(int x, int side, int draw_start, int draw_end, double step, t_vec2d texPos, t_game *game)
+{
+	int		i;
+	t_pixel	color;
+	
+	i = 0;
+	while (i < draw_start)
+		mlx_put_pixel(game->image, x, i++, game->ceiling.value);
+	while (i < draw_end)
+	{
+		color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
+		texPos.y += step;
+		mlx_put_pixel(game->image, x, i, color.value);
+		i++;
+	}
+	while (i < game->mlx->height)
+		mlx_put_pixel(game->image, x, i++, game->floor.value);
+}
+
+int	draw_line(int x, int side, double wall_x, t_game *game)
 {
 	int		draw_start;
 	int		draw_end;
-	int		i;
+	int		line_height;
 	double	step;
 	t_vec2d texPos;
 
+	if (game->depth[x] > 0)
+		line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
+	else
+		line_height = game->mlx->height;
 	draw_start = -line_height / 2 + game->mlx->height / 2;
 	if (draw_start < 0)
 		draw_start = 0;
@@ -28,25 +51,21 @@ int	draw_line(int x, int side, int line_height, double wall_x, t_game *game)
 		draw_end = game->mlx->height - 1;
 	step = 1.0 * game->textures[side].height / line_height;
 	texPos.x = wall_x * (double)game->textures[side].width;
-	texPos.y = (draw_start - game->mlx->height / 2 + line_height / 2) * step;
-	i = 0;
-	while (i < draw_start)
-	{
-		mlx_put_pixel(game->image, x, i, game->ceiling.value);
-		i++;
-	}
-	while (i < draw_end)
+	texPos.y = 0;
+	if (line_height > game->mlx->height)
+		texPos.y = (-game->mlx->height / 2 + line_height / 2) * step;
+	line_height = 0;
+	while (line_height < draw_start)
+		mlx_put_pixel(game->image, x, line_height++, game->ceiling.value);
+	while (line_height < draw_end)
 	{
 		t_pixel	color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
 		texPos.y += step;
-		mlx_put_pixel(game->image, x, i, color.value);
-		i++;
+		mlx_put_pixel(game->image, x, line_height, color.value);
+		line_height++;
 	}
-	while (i < game->mlx->height)
-	{
-		mlx_put_pixel(game->image, x, i, game->floor.value);
-		i++;
-	}
+	while (line_height < game->mlx->height)
+		mlx_put_pixel(game->image, x, line_height++, game->floor.value);
 	return (0);
 }
 
@@ -77,12 +96,11 @@ int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d difference, t_game 
 	double	wall_x;
 	double	angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
 	double	angle2 = fabs(vec2d_getrot(ray_dir));
-	int		line_height;
 
 	if (side < 2)
 	{
 		game->depth[x] = cos(angle) * difference.x;
-		wall_x = game->pos.y + sin(angle2) * difference.x * (1 - 2 * (ray_dir.y < 0)); //here problems
+		wall_x = game->pos.y + sin(angle2) * difference.x * (1 - 2 * (ray_dir.y < 0));
 	}
 	else
 	{
@@ -90,11 +108,7 @@ int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d difference, t_game 
 		wall_x = game->pos.x + cos(angle2) * difference.y;
 	}
 	wall_x -= floor(wall_x);
-	if (game->depth[x] > 0)
-		line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
-	else
-		line_height = game->mlx->height;
-	return (draw_line(x, side, line_height, wall_x, game));
+	return (draw_line(x, side, wall_x, game));
 }
 
 int	increase(int *map, double *side_dist, double delta_dist, double ray_dir)
