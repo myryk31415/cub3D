@@ -12,29 +12,28 @@
 
 #include "cub3d.h"
 
-void	draw_wall(int x, int side, int draw_start, int draw_end, double step, t_vec2d texPos, t_game *game)
-{
-	int		i;
-	t_pixel	color;
+// void	draw_wall(int x, int side, int draw_start, int draw_end, double step, t_vec2d texPos, t_game *game)
+// {
+// 	int		i;
+// 	t_pixel	color;
 	
-	i = 0;
-	while (i < draw_start)
-		mlx_put_pixel(game->image, x, i++, game->ceiling.value);
-	while (i < draw_end)
-	{
-		color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
-		texPos.y += step;
-		mlx_put_pixel(game->image, x, i, color.value);
-		i++;
-	}
-	while (i < game->mlx->height)
-		mlx_put_pixel(game->image, x, i++, game->floor.value);
-}
+// 	i = 0;
+// 	while (i < draw_start)
+// 		mlx_put_pixel(game->image, x, i++, game->ceiling.value);
+// 	while (i < draw_end)
+// 	{
+// 		color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
+// 		texPos.y += step;
+// 		mlx_put_pixel(game->image, x, i, color.value);
+// 		i++;
+// 	}
+// 	while (i < game->mlx->height)
+// 		mlx_put_pixel(game->image, x, i++, game->floor.value);
+// }
 
 int	draw_line(int x, int side, double wall_x, t_game *game)
 {
-	int		draw_start;
-	int		draw_end;
+	int		draw_bound;
 	int		line_height;
 	double	step;
 	t_vec2d texPos;
@@ -43,25 +42,23 @@ int	draw_line(int x, int side, double wall_x, t_game *game)
 		line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
 	else
 		line_height = game->mlx->height;
-	draw_start = -line_height / 2 + game->mlx->height / 2;
-	if (draw_start < 0)
-		draw_start = 0;
-	draw_end = line_height / 2 + game->mlx->height / 2;
-	if (draw_end >= game->mlx->height)
-		draw_end = game->mlx->height - 1;
+	draw_bound = -line_height / 2 + game->mlx->height / 2;
+	if (draw_bound < 0)
+		draw_bound = 0;
 	step = 1.0 * game->textures[side].height / line_height;
 	texPos.x = wall_x * (double)game->textures[side].width;
 	texPos.y = 0;
 	if (line_height > game->mlx->height)
 		texPos.y = (-game->mlx->height / 2 + line_height / 2) * step;
 	line_height = 0;
-	while (line_height < draw_start)
+	while (line_height < draw_bound)
 		mlx_put_pixel(game->image, x, line_height++, game->ceiling.value);
-	while (line_height < draw_end)
+	draw_bound = game->mlx->height - draw_bound - 1;
+	while (line_height < draw_bound)
 	{
-		t_pixel	color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
+		mlx_put_pixel(game->image, x, line_height,
+			game->textures[side].grid[(int)texPos.y][(int)texPos.x].value);
 		texPos.y += step;
-		mlx_put_pixel(game->image, x, line_height, color.value);
 		line_height++;
 	}
 	while (line_height < game->mlx->height)
