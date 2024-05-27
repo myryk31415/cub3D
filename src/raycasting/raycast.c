@@ -38,10 +38,7 @@ int	draw_line(int x, int side, double wall_x, t_game *game)
 	double	step;
 	t_vec2d texPos;
 
-	if (game->depth[x] > 0)
-		line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
-	else
-		line_height = game->mlx->height;
+	line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
 	draw_bound = -line_height / 2 + game->mlx->height / 2;
 	if (draw_bound < 0)
 		draw_bound = 0;
@@ -56,10 +53,9 @@ int	draw_line(int x, int side, double wall_x, t_game *game)
 	draw_bound = game->mlx->height - draw_bound - 1;
 	while (line_height < draw_bound)
 	{
-		mlx_put_pixel(game->image, x, line_height,
+		mlx_put_pixel(game->image, x, line_height++,
 			game->textures[side].grid[(int)texPos.y][(int)texPos.x].value);
 		texPos.y += step;
-		line_height++;
 	}
 	while (line_height < game->mlx->height)
 		mlx_put_pixel(game->image, x, line_height++, game->floor.value);
