@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/29 14:19:42 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/29 16:37:52 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,15 @@ typedef struct s_int2d
 	int	y;
 }	t_int2d;
 
+typedef struct s_parse
+{
+	int	i;
+	int	k;
+	int	j;
+	int	count;
+	int	start_pos;
+}	t_parse;
+
 typedef struct s_game
 {
 	mlx_t		*mlx;
@@ -114,10 +123,12 @@ char	**read_file(char *input_file);
 int		countlines(char *input_file);
 char	*get_env(char *var);
 int		check_valid_map(t_map *map, int i, int k, int j);
+int		check_valid_map(t_map *map, int i, int k, int j);
 
 // Parsing Main
 t_map	get_texture(char *str, int i, t_game *game, char **file);
 int		parser(t_game *game, char *input_file);
+int		parse_file(t_game *game, char **file, int i);
 int		parse_file(t_game *game, char **file, int i);
 t_map	parse_map(char **file, int i, t_game *game);
 t_pixel	get_color(char *str, int count, t_game *game, char **file);
