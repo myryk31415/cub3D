@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/29 16:32:50 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/29 17:12:51 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ void	initialize(t_game *game)
 	game->turn_speed = TURN_SPEED;
 	game->wall_height = WALL_HEIGHT;
 	game->fov_factor = 1;
-	game->dir.x = 0;
-	game->dir.y = 0;
 	game->mlx = mlx_init(START_WIDTH, START_HEIGHT, "Cub3D", 1);
 	mlx_set_cursor_mode(game->mlx, MLX_MOUSE_DISABLED);
 	game->image = mlx_new_image(game->mlx, START_WIDTH, START_HEIGHT);
@@ -173,10 +171,10 @@ int	main(int argc, char **argv)
 		printf("Usage: %s <map.cub>\n", argv[0]);
 		return (1);
 	}
+	game.dir.x = 0;
+	game.dir.y = 0;
 	parser(&game, argv[1]);
-	// printmap(&game);
 	initialize(&game);
-	// init_test(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);
 	mlx_loop(game.mlx);
 	mlx_delete_image(game.mlx, game.image);

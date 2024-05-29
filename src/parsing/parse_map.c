@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:10 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/29 14:34:15 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/29 17:06:09 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ t_map	parse_map(char **file, int i, t_game *game)
 	parse.j = parse.i;
 	while (file[parse.j])
 		parse.j++;
-	parse.j = 0;
 	map.grid = ft_calloc(sizeof(t_pixel *), parse.j + 1);
 	if (!map.grid)
 		error("Allocation Failure", game, file);
+	parse.j = 0;
 	while (file[parse.i] && file[parse.i][0] != '\0')
 		fill_value(&map, file, &parse, game);
 	map.height = parse.j;

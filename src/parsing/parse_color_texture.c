@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:16 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/29 14:45:13 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/29 17:13:13 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_map	get_texture(char *str, int i, t_game *game, char **file)
 		j++;
 	texture_path = ft_substr(str, i, j - i);
 	if (str[i - 1] == '.')
-		texture_path = ft_strjoin_free(get_env("PWD"), texture_path);	
+		texture_path = ft_strjoin_free(get_env("PWD"), texture_path);
 	if (fill_map(&map, texture_path, -1) == -1)
 	{
 		free(texture_path);
