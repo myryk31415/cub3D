@@ -12,25 +12,6 @@
 
 #include "cub3d.h"
 
-// void	draw_wall(int x, int side, int draw_start, int draw_end, double step, t_vec2d texPos, t_game *game)
-// {
-// 	int		i;
-// 	t_pixel	color;
-	
-// 	i = 0;
-// 	while (i < draw_start)
-// 		mlx_put_pixel(game->image, x, i++, game->ceiling.value);
-// 	while (i < draw_end)
-// 	{
-// 		color = game->textures[side].grid[(int)texPos.y][(int)texPos.x];
-// 		texPos.y += step;
-// 		mlx_put_pixel(game->image, x, i, color.value);
-// 		i++;
-// 	}
-// 	while (i < game->mlx->height)
-// 		mlx_put_pixel(game->image, x, i++, game->floor.value);
-// }
-
 int	draw_line(int x, int side, double wall_x, t_game *game)
 {
 	int		draw_bound;
@@ -40,8 +21,7 @@ int	draw_line(int x, int side, double wall_x, t_game *game)
 
 	line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
 	draw_bound = -line_height / 2 + game->mlx->height / 2;
-	if (draw_bound < 0)
-		draw_bound = 0;
+	draw_bound *= (draw_bound > 0);
 	step = 1.0 * game->textures[side].height / line_height;
 	texPos.x = wall_x * (double)game->textures[side].width;
 	texPos.y = 0;
@@ -57,7 +37,7 @@ int	draw_line(int x, int side, double wall_x, t_game *game)
 			game->textures[side].grid[(int)texPos.y][(int)texPos.x].value);
 		texPos.y += step;
 	}
-	while (line_height < game->mlx->height)
+	while (line_height < game->mlx->height	)
 		mlx_put_pixel(game->image, x, line_height++, game->floor.value);
 	return (0);
 }
@@ -84,25 +64,46 @@ void	empty_line(t_game *game, int x)
 	}
 }
 
-int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d difference, t_game *game)
+double	get_wall_x(int side, t_vec2d ray_dir, t_vec2d difference, t_game *game)
 {
-	double	wall_x;
-	double	angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
-	double	angle2 = fabs(vec2d_getrot(ray_dir));
+	double angle = fabs(vec2d_getrot(ray_dir));
+	double wall_x;
 
 	if (side < 2)
-	{
-		game->depth[x] = cos(angle) * difference.x;
-		wall_x = game->pos.y + sin(angle2) * difference.x * (1 - 2 * (ray_dir.y < 0));
-	}
+		wall_x = game->pos.y + sin(angle) * difference.x * (1 - 2 * (ray_dir.y < 0));
 	else
-	{
-		game->depth[x] = cos(angle) * difference.y;
-		wall_x = game->pos.x + cos(angle2) * difference.y;
-	}
+		wall_x = game->pos.x + cos(angle) * difference.y;
 	wall_x -= floor(wall_x);
-	return (draw_line(x, side, wall_x, game));
+	return (wall_x);
 }
+
+void	set_depth(int x, t_vec2d ray_dir, double difference, t_game *game)
+{
+	double	angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
+
+	game->depth[x] = cos(angle) * difference;
+	return;
+}
+
+// int	calc_wall_dist(int x, int side, t_vec2d ray_dir, t_vec2d difference, t_game *game)
+// {
+// 	double	wall_x;
+// 	double	angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
+// 	double	angle2 = fabs(vec2d_getrot(ray_dir));
+
+// 	if (side < 2)
+// 	{
+// 		game->depth[x] = cos(angle) * difference.x;
+// 		wall_x = game->pos.y + sin(angle2) * difference.x * (1 - 2 * (ray_dir.y < 0));
+// 	}
+// 	else
+// 	{
+// 		game->depth[x] = cos(angle) * difference.y;
+// 		wall_x = game->pos.x + cos(angle2) * difference.y;
+// 	}
+// 	wall_x -= floor(wall_x);
+// 	return (draw_line(x, side, wall_x, game));
+// }
 
 int	increase(int *map, double *side_dist, double delta_dist, double ray_dir)
 {
@@ -144,14 +145,6 @@ int	cast_loop(t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *g
 	return (0);
 }
 
-// void	assign(double *side_dist, double ray_dir, double delta_dist, double pos)
-// {
-// 	if (ray_dir < 0)
-// 		*side_dist = pos * delta_dist;
-// 	else
-// 		*side_dist = (-pos + 1.0) * delta_dist;
-// }
-
 int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 {
 	t_int2d map;
@@ -171,15 +164,14 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game)
 		side_dist.y = (game->pos.y - map.y) * delta_dist.y;
 	else
 		side_dist.y = (map.y + 1.0 - game->pos.y) * delta_dist.y;
-	// assign(&side_dist.x, ray_dir.x, delta_dist.x, game->pos.x - map.x);
-	// assign(&side_dist.y, ray_dir.y, delta_dist.y, game->pos.y - map.y);
 	side = cast_loop(ray_dir, delta_dist, &side_dist, game);
 	if (side == -1)
-	{
-		empty_line(game, x);
-		return (0);
-	}
-	return (calc_wall_dist(x, side, ray_dir, vec2d_sub(side_dist, delta_dist), game));
+		return (empty_line(game, x), 0);
+	if (side < 2)
+		set_depth(x, ray_dir,side_dist.x - delta_dist.x, game);
+	else
+		set_depth(x, ray_dir,side_dist.y - delta_dist.y, game);
+	return (draw_line(x, side, get_wall_x(side, ray_dir, vec2d_sub(side_dist, delta_dist), game), game));
 }
 
 /*
