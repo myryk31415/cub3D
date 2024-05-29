@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/29 13:48:40 by padam            ###   ########.fr       */
+/*   Updated: 2024/05/29 15:20:54 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,7 @@ void	initialize(t_game *game)
 	mlx_set_cursor_mode(game->mlx, MLX_MOUSE_DISABLED);
 	game->image = mlx_new_image(game->mlx, START_WIDTH, START_HEIGHT);
 	mlx_image_to_window(game->mlx, game->image, 0, 0);
-	int x;
-	int y;
 	mlx_set_mouse_pos(game->mlx, game->mlx->width / 2, game->mlx->height / 2);
-	mlx_get_mouse_pos(game->mlx, &x, &y);
 	game->init = 5;
 	game->depth = ft_calloc(START_WIDTH, sizeof(double));
 }
