@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/20 16:57:07 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/29 13:48:40 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,15 @@ void	loop_hook(void *in)
 	int	y;
 	
 	key_binds(in);
+	if (game->mlx->height != game->image->height || game->mlx->width != game->image->width)
+	{
+		mlx_delete_image(game->mlx, game->image);
+		game->image = mlx_new_image(game->mlx, game->mlx->width, game->mlx->height);
+		mlx_image_to_window(game->mlx, game->image, 0, 0);
+		free(game->depth);
+		game->depth = ft_calloc(game->mlx->width, sizeof(double));
+		game->init = 5;
+	}
 	if (game->init == 0)
 	{
 		mlx_get_mouse_pos(game->mlx, &x, &y);
@@ -147,14 +156,6 @@ void	loop_hook(void *in)
 	else
 		game->init--;
 	mlx_set_mouse_pos(game->mlx, game->mlx->width / 2, game->mlx->height / 2);
-	if (game->mlx->height != game->image->height || game->mlx->width != game->image->width)
-	{
-		mlx_delete_image(game->mlx, game->image);
-		game->image = mlx_new_image(game->mlx, game->mlx->width, game->mlx->height);
-		mlx_image_to_window(game->mlx, game->image, 0, 0);
-		free(game->depth);
-		game->depth = ft_calloc(game->mlx->width, sizeof(double));
-	}
 	raycast(in);
 	sprites(game);
 }
