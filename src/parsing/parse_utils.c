@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:56:05 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 09:59:07 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/29 13:43:56 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	countlines(char *input_file)
 	fd = open(input_file, O_RDONLY, 0666);
 	if (fd == -1)
 		return (ft_putstr_fd("Error\nWrong Map\n", 2), -1);
-	while(1)
+	while (1)
 	{
 		tmp = get_next_line(fd);
 		if (!tmp)
-			break;
+			break ;
 		lines++;
 		free(tmp);
 	}
@@ -41,7 +41,7 @@ char	**read_file(char *input_file)
 	int		i;
 	int		lines;
 
-	lines =	countlines(input_file);
+	lines = countlines(input_file);
 	if (lines == -1)
 		return (NULL);
 	fd = open(input_file, O_RDONLY, 0666);
@@ -49,14 +49,14 @@ char	**read_file(char *input_file)
 		return (ft_putstr_fd("Error\nWrong Map\n", 2), NULL);
 	file = ft_calloc(sizeof(char *), lines + 1);
 	if (!file)
-		return (close(fd), ft_putstr_fd("Error\nAllocation Failure\n", 2), NULL);
+		return (close(fd), ft_putstr_fd("Error\nAlloc Failure\n", 2), NULL);
 	i = 0;
-	while(i < lines)
+	while (i < lines)
 	{
 		file[i] = get_next_line(fd);
 		file[i][ft_strlen(file[i]) - 1] = '\0';
 		if (!file[i])
-			break;
+			break ;
 		i++;
 	}
 	file[lines] = NULL;
@@ -83,7 +83,7 @@ char	*get_env(char *var)
 	int			j;
 	char		*tmp;
 	extern char	**environ;
-	
+
 	i = 0;
 	while (environ[i])
 	{
@@ -105,13 +105,8 @@ char	*get_env(char *var)
 	return (NULL);
 }
 
-int	check_valid_map(t_map *map)
+int	check_valid_map(t_map *map, int i, int k, int j)
 {
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
 	while (i < map->height || i < map->width)
 	{
 		k = 0;
