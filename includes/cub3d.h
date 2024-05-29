@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/20 17:04:30 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/29 14:19:42 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,15 @@ typedef struct s_game
 	int			x_screen;
 }	t_game;
 
+typedef struct s_parse
+{
+	int	i;
+	int	k;
+	int	j;
+	int	start_pos;
+	int	count;
+}	t_parse;
+
 int		raycast(t_game *game);
 int		sprites(t_game *game);
 
@@ -104,14 +113,14 @@ int		check_if_map(char *str);
 char	**read_file(char *input_file);
 int		countlines(char *input_file);
 char	*get_env(char *var);
-int		check_valid_map(t_map *map);
+int		check_valid_map(t_map *map, int i, int k, int j);
 
 // Parsing Main
+t_map	get_texture(char *str, int i, t_game *game, char **file);
 int		parser(t_game *game, char *input_file);
-int		parse_file(t_game *game, char **file);
+int		parse_file(t_game *game, char **file, int i);
 t_map	parse_map(char **file, int i, t_game *game);
 t_pixel	get_color(char *str, int count, t_game *game, char **file);
-t_map	get_texture(char *str, int i, t_game *game, char **file);
 
 // Cleanup
 void	free_str_array(void **arr, int *n);
