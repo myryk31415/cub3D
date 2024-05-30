@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/29 14:19:42 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/30 10:36:29 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,10 @@ typedef struct s_parse
 	int	start_pos;
 	int	count;
 }	t_parse;
-
+// Main Functions
 int		raycast(t_game *game);
 int		sprites(t_game *game);
+void	loop_hook(void *in);
 
 // Parsing Utils
 int		check_if_map(char *str);
@@ -124,6 +125,6 @@ t_pixel	get_color(char *str, int count, t_game *game, char **file);
 
 // Cleanup
 void	free_str_array(void **arr, int *n);
-void	error(char *msg, t_game *game, char **file);
+void	error(char *msg, t_game *game, char **file, int sprite_allocated);
 void	error_sprite(void);
 #endif
