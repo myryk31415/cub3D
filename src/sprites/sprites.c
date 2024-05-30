@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 11:15:28 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/20 20:43:41 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/30 09:54:37 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,27 @@ void	sort_sprites(int num_sprites, double *sprite_dist, int *sprite_order)
 {
 	int	i;
 	int	j;
-	int		tmp_int;
+	int	tmp_int;
+	int	swap;
 
-	i = 0;
-	if (num_sprites == 1)
-		return ;
-	while (i < num_sprites - 1)
+	j = -1;
+	while (++j < num_sprites - 1)
 	{
-		if (sprite_dist[sprite_order[i]] < sprite_dist[sprite_order[i + 1]])
+		i = 0;
+		swap = 0;
+		while (i < num_sprites - 1)
 		{
-			tmp_int = sprite_order[i];
-			sprite_order[i] = sprite_order[i + 1];
-			sprite_order[i + 1] = tmp_int;
+			if (sprite_dist[sprite_order[i]] < sprite_dist[sprite_order[i + 1]])
+			{
+				tmp_int = sprite_order[i];
+				sprite_order[i] = sprite_order[i + 1];
+				sprite_order[i + 1] = tmp_int;
+				swap = 1;
+			}
+			i++;
 		}
-		j = 0;
-		while (j < num_sprites - 1 && sprite_dist[sprite_order[j]] > sprite_dist[sprite_order[j + 1]])
-			j++;
-		if (j == num_sprites - 1)
-			break;
-		i++;
+		if (!swap)
+			break ;
 	}
 	return ;
 }
@@ -49,25 +51,27 @@ static void	init_sprites(t_game *game, double *sprite_dist, int *sprite_order)
 		sprite_order[i] = i;
 		sprite_dist[i] = (game->pos.x - game->sprites[i].pos.x) * \
 		(game->pos.x - game->sprites[i].pos.x) + (game->pos.y - \
-		game->sprites[i].pos.y) * (game->pos.y- game->sprites[i].pos.y);
+		game->sprites[i].pos.y) * (game->pos.y - game->sprites[i].pos.y);
 		game->sprites[i].texture = 4;
 		i++;
 	}
 	sort_sprites(game->num_sprites, sprite_dist, sprite_order);
 }
 
-void	calculate_sprite(t_game *game, int *sprite_order, int i)
+void	calculate_sprite(t_game *game, int *sprite_order, \
+						int i, double transform)
 {
 	t_vec2d	sprite_pos;
-	double	transform;
 
 	transform = 1.0 / (game->camera_plane.x * game->dir.y - \
 		game->dir.x * game->camera_plane.y);
 	sprite_pos = vec2d_sub(game->sprites[sprite_order[i]].pos, game->pos);
 	game->transformed.x = transform * (sprite_pos.x * game->dir.y - \
 		sprite_pos.y * game->dir.x);
-	game->transformed.y = transform * (-game->camera_plane.y * sprite_pos.x + sprite_pos.y * game->camera_plane.x);
-	game->x_screen = (int)(game->mlx->width / 2) * (1. + game->transformed.x / game->transformed.y);
+	game->transformed.y = transform * (-game->camera_plane.y * \
+	sprite_pos.x + sprite_pos.y * game->camera_plane.x);
+	game->x_screen = (int)(game->mlx->width / 2) * (1. + \
+	game->transformed.x / game->transformed.y);
 	game->sprite_height = fabs((int)game->mlx->height / game->transformed.y);
 	game->sprite_width = fabs((int)game->mlx->height / game->transformed.y);
 	game->start_y = -game->sprite_height / 2 + game->mlx->height / 2;
@@ -88,27 +92,28 @@ void	draw_sprite(t_game *game, int *sprite_order, t_map texture)
 {
 	int			j;
 	int			k;
-	int			tex_x;
-	int			tex_y;
+	int			t_x;
+	int			t_y;
 
-	j = game->start_x;
-	while (j < game->end_x)
+	j = game->start_x - 1;
+	while (++j < game->end_x)
 	{
-		tex_x = (int)((((j) - (-game->sprite_width / 2. + game->x_screen)))
-			* texture.width / game->sprite_width);
-		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width && game->transformed.y < game->depth[j])
+		t_x = (int)((((j) - (-game->sprite_width / 2. + game->x_screen)))
+				* texture.width / game->sprite_width);
+		if (game->transformed.y > 0 && j > 0 && j < game->mlx->width \
+		&& game->transformed.y < game->depth[j])
 		{
-			k = game->start_y;
-			while (k >= 0 && k < game->end_y)
+			k = game->start_y - 1;
+			while (game->start_y >= 0 && ++k < game->end_y)
 			{
-				tex_y = ((int)(k * 256. - game->mlx->height * 128. + game->sprite_height * 128.) * texture.height) / game->sprite_height / 256;
-				if (tex_x >= 0 && tex_y >= 0 && tex_x < texture.width && tex_y < texture.height && \
-					texture.grid[tex_y][tex_x].value != 255)
-					mlx_put_pixel(game->image, j, k, texture.grid[tex_y][tex_x].value);
-				k++;
+				t_y = ((k * 256 - game->mlx->height * 128 + game->sprite_height \
+				* 128) * texture.height) / game->sprite_height / 256;
+				if (t_x >= 0 && t_y >= 0 && t_x < texture.width && t_y \
+				< texture.height && texture.grid[t_y][t_x].value != 255)
+					mlx_put_pixel(game->image, j, k, \
+					texture.grid[t_y][t_x].value);
 			}
 		}
-		j++;
 	}
 }
 
@@ -124,10 +129,12 @@ int	sprites(t_game *game)
 	i = 0;
 	while (i < game->num_sprites)
 	{
-		calculate_sprite(game, sprite_order, i);
+		calculate_sprite(game, sprite_order, i, 0);
 		draw_sprite(game, sprite_order, \
 		game->textures[game->sprites[sprite_order[i]].texture]);
 		i++;
 	}
+	free(sprite_dist);
+	free(sprite_order);
 	return (0);
 }
