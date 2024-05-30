@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:17 by padam             #+#    #+#             */
-/*   Updated: 2024/05/30 10:35:48 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/30 11:54:20 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,13 @@ int	main(int argc, char **argv)
 	initialize(&game);
 	mlx_loop_hook(game.mlx, loop_hook, &game);
 	mlx_loop(game.mlx);
-	mlx_delete_image(game.mlx, game.image);
-	mlx_close_window(game.mlx);
 	mlx_terminate(game.mlx);
 	i = 0;
-	while (i < 4)
+	while (i < 5)
 		free_str_array((void *)game.textures[i++].grid, &game.textures->height);
 	free_str_array((void *)game.map.grid, &game.map.height);
 	free(game.sprites);
 	free(game.textures);
+	free(game.depth);
 	return (0);
 }
