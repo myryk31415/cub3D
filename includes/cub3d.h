@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 22:43:11 by padam             #+#    #+#             */
-/*   Updated: 2024/05/30 10:36:29 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/30 11:28:31 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,12 @@ int		parse_file(t_game *game, char **file, int i);
 t_map	parse_map(char **file, int i, t_game *game);
 t_pixel	get_color(char *str, int count, t_game *game, char **file);
 
+// Raycast Utils
+int		increase(int *map, double *side_dist, \
+		double delta_dist, double ray_dir);
+void	set_depth(int x, t_vec2d ray_dir, double difference, t_game *game);
+double	get_wall_x(int side, t_vec2d ray_dir, t_vec2d difference, t_game *game);
+void	empty_line(t_game *game, int x);
 // Cleanup
 void	free_str_array(void **arr, int *n);
 void	error(char *msg, t_game *game, char **file, int sprite_allocated);

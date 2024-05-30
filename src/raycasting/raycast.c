@@ -3,30 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
+/*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 23:07:12 by padam             #+#    #+#             */
-/*   Updated: 2024/05/17 02:37:17by padam            ###   ########.fr       */
+/*   Created: 2024/05/30 11:29:44 by antonweizma       #+#    #+#             */
+/*   Updated: 2024/05/30 11:29:47 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	draw_line(int x, int side, double wall_x, t_game *game)
+int	draw_line(int x, int side, double texpos_x, t_game *game)
 {
 	int		draw_bound;
 	int		line_height;
 	double	step;
-	t_vec2d	texpos;
+	double	texpos_y;
 
 	line_height = (int)(game->mlx->width * game->wall_height / game->depth[x]);
 	draw_bound = -line_height / 2 + game->mlx->height / 2;
 	draw_bound *= (draw_bound > 0);
 	step = 1.0 * game->textures[side].height / line_height;
-	texpos.x = wall_x * (double)game->textures[side].width;
-	texpos.y = 0;
+	texpos_y = 0;
 	if (line_height > game->mlx->height)
-		texpos.y = (-game->mlx->height / 2 + line_height / 2) * step;
+		texpos_y = (-game->mlx->height / 2 + line_height / 2) * step;
 	line_height = 0;
 	while (line_height < draw_bound)
 		mlx_put_pixel(game->image, x, line_height++, game->ceiling.value);
@@ -34,8 +33,8 @@ int	draw_line(int x, int side, double wall_x, t_game *game)
 	while (line_height < draw_bound)
 	{
 		mlx_put_pixel(game->image, x, line_height++,
-			game->textures[side].grid[(int)texpos.y][(int)texpos.x].value);
-		texpos.y += step;
+			game->textures[side].grid[(int)texpos_y][(int)texpos_x].value);
+		texpos_y += step;
 	}
 	while (line_height < game->mlx->height)
 		mlx_put_pixel(game->image, x, line_height++, game->floor.value);
@@ -47,60 +46,9 @@ int	draw_line(int x, int side, double wall_x, t_game *game)
  *@param game The game structure.
  *@param x The screen x coordinate.
 */
-void	empty_line(t_game *game, int x)
-{
-	int	i;
 
-	i = 0;
-	while (i < game->mlx->height / 2)
-	{
-		mlx_put_pixel(game->image, x, i, game->ceiling.value);
-		i++;
-	}
-	while (i < game->mlx->height)
-	{
-		mlx_put_pixel(game->image, x, i, game->floor.value);
-		i++;
-	}
-}
-
-double	get_wall_x(int side, t_vec2d ray_dir, t_vec2d difference, t_game *game)
-{
-	double	angle;
-	double	wall_x;
-
-	angle = fabs(vec2d_getrot(ray_dir));
-	if (side < 2)
-		wall_x = game->pos.y + sin(angle) * \
-		difference.x * (1 - 2 * (ray_dir.y < 0));
-	else
-		wall_x = game->pos.x + cos(angle) * difference.y;
-	wall_x -= floor(wall_x);
-	return (wall_x);
-}
-
-void	set_depth(int x, t_vec2d ray_dir, double difference, t_game *game)
-{
-	double	angle;
-
-	angle = fabs(vec2d_getrot(ray_dir) - vec2d_getrot(game->dir));
-	game->depth[x] = cos(angle) * difference;
-	return ;
-}
-
-int	increase(int *map, double *side_dist, double delta_dist, double ray_dir)
-{
-	*side_dist += delta_dist;
-	if (ray_dir > 0)
-	{
-		(*map)++;
-		return (0);
-	}
-	(*map)--;
-	return (1);
-}
-
-int	cast_loop(t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *game)
+int	cast_loop(t_vec2d ray_dir, t_vec2d delta_dist, \
+				t_vec2d *side_dist, t_game *game)
 {
 	int		side;
 	t_int2d	map;
@@ -121,7 +69,7 @@ int	cast_loop(t_vec2d ray_dir, t_vec2d delta_dist, t_vec2d *side_dist, t_game *g
 			return (-1);
 		if (map.y >= game->map.height && ray_dir.y >= 0)
 			return (-1);
-		if (map.y >= 0 && map.y < game->map.height && map.x >= 0 &&
+		if (map.y >= 0 && map.y < game->map.height && map.x >= 0 && \
 			map.x < game->map.width && game->map.grid[map.y][map.x].value == 1)
 			return (side);
 	}
@@ -153,8 +101,8 @@ int	calculate_ray(int x, t_vec2d ray_dir, t_game *game, int side)
 		set_depth(x, ray_dir, side_dist.x - delta_dist.x, game);
 	else
 		set_depth(x, ray_dir, side_dist.y - delta_dist.y, game);
-	return (draw_line(x, side, get_wall_x(side, ray_dir, \
-	vec2d_sub(side_dist, delta_dist), game), game));
+	return (draw_line(x, side, get_wall_x(side, ray_dir, vec2d_sub(side_dist, \
+	delta_dist), game) * (double)game->textures[side].width, game));
 }
 
 /*
