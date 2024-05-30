@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:16 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/29 17:13:13 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/30 10:27:37 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_pixel	get_color(char *str, int count, t_game *game, char **file)
 	i = -1;
 	count = assign_color(&color, &i, count, str);
 	if (count < 3)
-		error("RGB Colors missing\n", game, file);
+		error("RGB Colors missing\n", game, file, 0);
 	return (color);
 }
 
@@ -107,7 +107,7 @@ t_map	get_texture(char *str, int i, t_game *game, char **file)
 		if (str[i] == '/')
 			break ;
 	if (!str[i])
-		error("Wrong Texture Path", game, file);
+		error("Wrong Texture Path", game, file, 0);
 	j = i;
 	while (str[j] && str[j] != ' ' && str[j] != '\n')
 		j++;
@@ -117,7 +117,7 @@ t_map	get_texture(char *str, int i, t_game *game, char **file)
 	if (fill_map(&map, texture_path, -1) == -1)
 	{
 		free(texture_path);
-		error(NULL, game, file);
+		error(NULL, game, file, 0);
 	}
 	free(texture_path);
 	return (map);

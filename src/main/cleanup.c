@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 10:39:56 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/29 14:48:25 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/30 10:28:14 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ void	free_str_array(void **arr, int *n)
 	else
 		while (arr[i])
 			free(arr[i++]);
-	
 	free(arr);
 }
 
-void	error(char *msg, t_game *game, char **file)
+void	error(char *msg, t_game *game, char **file, int sprite_allocated)
 {
 	char	*tmp;
 	int		i;
@@ -45,7 +44,8 @@ void	error(char *msg, t_game *game, char **file)
 		free_str_array((void *)game->textures[i++].grid, \
 		&game->textures->height);
 	free(game->textures);
-	free(game->sprites);
+	if (sprite_allocated)
+		free(game->sprites);
 	free_str_array((void *)file, NULL);
 	exit (1);
 }

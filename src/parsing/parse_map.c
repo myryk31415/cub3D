@@ -6,7 +6,7 @@
 /*   By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:10 by antonweizma       #+#    #+#             */
-/*   Updated: 2024/05/29 17:06:09 by antonweizma      ###   ########.fr       */
+/*   Updated: 2024/05/30 10:27:01 by antonweizma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,14 @@ void	get_dir_spirtes(char **file, t_map *map, t_game *game, t_parse *parse)
 		map->grid[parse->j][parse->k].value = 3;
 	}
 	else
-		error("Wrong charakter in map\n", game, file);
+		error("Wrong charakter in map\n", game, file, 1);
 }
 
 int	fill_value(t_map *map, char **file, t_parse *parse, t_game *game)
 {
 	map->grid[parse->j] = ft_calloc(sizeof(t_pixel), map->width);
 	if (!map->grid[parse->j])
-		error("Allocation Failure", game, file);
+		error("Allocation Failure", game, file, 1);
 	parse->k = -1;
 	while (++parse->k < map->width)
 	{
@@ -117,16 +117,16 @@ t_map	parse_map(char **file, int i, t_game *game)
 		parse.j++;
 	map.grid = ft_calloc(sizeof(t_pixel *), parse.j + 1);
 	if (!map.grid)
-		error("Allocation Failure", game, file);
+		error("Allocation Failure", game, file, 1);
 	parse.j = 0;
 	while (file[parse.i] && file[parse.i][0] != '\0')
 		fill_value(&map, file, &parse, game);
 	map.height = parse.j;
 	if (!parse.start_pos)
-		error("No Players\n", game, file);
+		error("No Players\n", game, file, 1);
 	if (parse.start_pos > 1)
-		error("Too many Players\n", game, file);
+		error("Too many Players\n", game, file, 1);
 	if (check_valid_map(&map, 0, 0, 0))
-		error("Map walls not closed\n", game, file);
+		error("Map walls not closed\n", game, file, 1);
 	return (map);
 }
