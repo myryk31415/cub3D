@@ -73,6 +73,7 @@ mlx:
 
 init:
 	git submodule update --init --recursive
+	make mlx
 
 update:
 	git submodule update --recursive --remote
