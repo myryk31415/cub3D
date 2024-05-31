@@ -24,7 +24,7 @@ CFLAGS += -D LINUX -lm
 LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -lXext -lX11 -lm -lbsd -lglfw -lpthread
 else
 #MacOS
-LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw3 -pthread -framework Cocoa -framework OpenGL -framework IOKit
+LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -framework Cocoa -framework OpenGL -framework IOKit
 endif
 
 SRC_PATH = src
