@@ -1,17 +1,17 @@
-# cub3D - My First RayCaster
+# Cub3D
 
-## Table of Contents
-- [cub3D - My First RayCaster](#cub3d---my-first-raycaster)
-	- [Table of Contents](#table-of-contents)
-- [Project](#project)
+## Table of contents
+- [Cub3D](#cub3d)
+	- [Table of contents](#table-of-contents)
+	- [The Project](#the-project)
 	- [Features](#features)
 	- [Map File (.cub)](#map-file-cub)
 	- [Installation](#installation)
 
-# Project
+## The Project
 Cub3d is a raycaster render engine that can be used to display square grid maps in 3d space. We ([@antonweizmann](https://www.github.com/antonweizmann)) also implemented sprites. It is inspired by the first FPS: [Wolfenstein 3D](http://users.atw.hu/wolf3d/).
 
-![image](https://github.com/myryk31415/cub3D/blob/main/readme/Screenshot_13-Jun_22-00-07_Cub3D.png)
+![image](https://github.com/myryk31415/cub3D/blob/main/readme/Screenshot_13-Jun_22-00-32_Cub3D.png)
 
 ![image](https://github.com/myryk31415/cub3D/blob/main/readme/Screenshot_13-Jun_22-01-01_Cub3D.png)
 
